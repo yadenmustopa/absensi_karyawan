@@ -13,7 +13,7 @@ class Absens extends Migration
         $sql = "CREATE TABLE IF NOT EXISTS `$this->table`(
             `id` INT(11) NOT NULL,
             `karyawan_id` INT(11) NULL DEFAULT NULL,
-            `created_at` INT(11) NULL DEFAULT NULL COMMENT 'use time stamp',
+            `created_at` INT(15) NULL DEFAULT NULL COMMENT 'use time stamp',
             `status` ENUM('MASUK','TANPA_KETERANGAN','CUTI','IZIN') NULL DEFAULT 'MASUK',
             `description` LONGTEXT NULL DEFAULT NULL,
             PRIMARY KEY (`id`),
