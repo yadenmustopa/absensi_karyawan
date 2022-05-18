@@ -1,0 +1,22 @@
+{
+  "name": "absensi_karyawan",
+  "version": "1.0.0",
+  "description": "this project is testing with deadline 2 day,bismillahirrohmanirrohiim",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yadenmustopa/absensi_karyawan.git"
+  },
+  "author": "Yaden.Mustopa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yadenmustopa/absensi_karyawan/issues"
+  },
+  "homepage": "https://github.com/yadenmustopa/absensi_karyawan#readme"
+}
