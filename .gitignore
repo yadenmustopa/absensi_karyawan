@@ -1,6 +1,11 @@
 #-------------------------
 # Operating Specific Junk Files
 #-------------------------
+#node_modules FIle
+node_modules
+package-lock.json
+log
+
 
 # OS X
 .DS_Store

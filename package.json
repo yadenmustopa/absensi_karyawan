@@ -7,7 +7,11 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cross-env NODE_ENV=production webpack && node asset-joiner.js",
+    "webpack-watch": "webpack --watch",
+    "join-asset": "node asset-joiner.js",
+    "run-dev-server": "php spark serve --port 9092"
   },
   "repository": {
     "type": "git",
@@ -18,5 +22,28 @@
   "bugs": {
     "url": "https://github.com/yadenmustopa/absensi_karyawan/issues"
   },
-  "homepage": "https://github.com/yadenmustopa/absensi_karyawan#readme"
+  "homepage": "https://github.com/yadenmustopa/absensi_karyawan#readme",
+  "devDependencies": {
+    "bootstrap-material-design": "^4.1.3",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "lotek": "^1.2.3",
+    "mini-css-extract-plugin": "^2.6.0",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^12.6.0",
+    "serve": "^13.0.2",
+    "style-loader": "^3.3.1",
+    "svelte": "^3.48.0",
+    "svelte-loader": "^3.1.2",
+    "svelte-material-ui": "^6.0.0-beta.16",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "moment": "^2.29.3",
+    "momentjs": "^2.0.0",
+    "toastr": "^2.1.4"
+  }
 }
