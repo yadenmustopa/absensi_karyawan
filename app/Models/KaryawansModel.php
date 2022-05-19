@@ -12,7 +12,7 @@
         protected $updatedField = "updated_at";
         protected $returnType   = "array";
 
-        protected $allowedFields = ['user_id','address','position','no_hp','salary','photo','updated_at','crated_at'];
+        protected $allowedFields = ['user_id','address','position','no_hp','salary','photo','updated_at','created_at'];
 
         protected $validationRules   = [];
         protected $validationMessage = [];
