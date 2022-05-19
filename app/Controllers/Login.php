@@ -3,8 +3,9 @@
     
     use App\Controllers\BaseController;
     use App\Models\UsersModel;
+    use App\Libraries\ApiKey;
 
-    class Login extends BaseController
+    class Login extends ApiController
     {
         public function index()
         {
@@ -22,7 +23,7 @@
             $valid = $this->validation( $rules );
 
             if( !$valid ) {
-                echo 'username/password jangan ada yang kosong ';
+                return $this->errorOutput(  'username/password jangan ada yang kosong' );
             }
             
             $users_model = new UsersModel();
@@ -37,10 +38,19 @@
             ];
             
             $auth = $users_model->where( $data )->find();
+
             if( ! $auth ){
-                return;
+                return $this->errorOutput('Kesalahan Credential');
             }
+
+
+            $api_key = ApiKey::generate( $username, $password );
+
+
+            $data = [ "api_key" => $api_key ];
+            return $this->successOutput( $auth, );
         }
+
 
         protected function validation( $rules )
         {

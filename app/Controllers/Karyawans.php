@@ -5,13 +5,16 @@
     use App\Models\KaryawansModel;
     use CodeIgniter\I18n\Time;
 
-    class Karyawans extends BaseController
+    class Karyawans extends ApiController
     {
 
         public function index()
         {
             $karyawans_model = new KaryawansModel();
-            $data            = $karyawans_model->findAll();
+            $$sql            = $karyawans_model->findAll();
+
+            $data = [ "data" => $sql ];
+            return $this->successOutput( $data );
         }
 
         public function add()
@@ -19,7 +22,7 @@
             $rules           = $this->getRulesAdd();
             $valid           = $this->validation( $rules );
 
-            if( ! $valid['success'] ) return $valid;
+            if( ! $valid['success'] ) return $this->errorOutput( $valid['message']) ;
 
             
             $user_id         = $this->request->getPost('user_id');
@@ -39,13 +42,11 @@
                 'updated_at' => $now,
                 'created_at' => $now,
             ];
-            
-
 
             $karyawans_model = new KaryawansModel();
             $karyawans_model->insert( $karyawan );
 
-            return [ 'success' => true ];
+            return $this->successOutput([]);
         }
 
         public function update( $id )
@@ -55,7 +56,7 @@
 
             $valid           = $this->validation( $rules );
 
-            if( ! $valid ) return $valid;
+            if( ! $valid ) return $this->errorOutput( $valid["message"] );
 
             $address         = $this->request->getVar('address');
             $position        = $this->request->getVar('position');
@@ -73,7 +74,7 @@
 
             $karyawans_model->update( $id, $data );
 
-            return [ 'success' => true ];
+            return $this->successOutput( [ 'success' => true ] );
         }
 
 
@@ -82,9 +83,7 @@
             $rules = $this->getRulesUpload();
             $valid = $this->validation( $rules );
            
-            if( ! $valid['success'] ){
-                return $valid;
-            }
+            if( ! $valid['success'] ) return $this->errorOutput( $valid['message' ]);
 
             $img = $this->request->getFile('photo');
             $name = $img->getRandomName();
@@ -93,6 +92,9 @@
 
             $karyawans_model = new KaryawansModel();
             $karyawans_model->update( $id, $data );
+
+
+            return $this->successOutput(["success" => true]);
         }
 
 
