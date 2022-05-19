@@ -12,19 +12,19 @@
         {
             $search        = $this->request->getGet('search');
 
-            $name = trim( $name );
+            $$search = trim( $$search );
 
             $users_model = new UsersModel();
             $base = "SELECT `users.name` AS `name`,`users.created_at` AS `created_at`,`users.username` AS `username`,`users.status`AS`status`,`karyawans.address` AS `address`,`karyawans.position` AS `position`,`karyawans.no_hp` AS `no_hp`, `karyawans.photos` AS `photos` FROM `users` JOIN `karyawans` ON `karyawans.user_id` = `users.id`";
 
             
-            if( $name ){
+            if( $search ){
                 $base .= "WHERE `name` LIKE `%$search%` OR WHERE `username` LIKE `%$search%` OR `address` LIKE `%$search%`  ";
             }
             
             $sql = $users_model->db->query( $base );
-
-            return ["success" => true, "data" => $data->getResultArray() ];
+            
+            return ["success" => true, "data" => $$sql->getResultArray() ];
         }
 
 
