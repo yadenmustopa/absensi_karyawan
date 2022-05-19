@@ -129,4 +129,5 @@ nb-configuration.xml
 /results/
 /phpunit*.xml
 /.phpunit.*.cache
-.history/*
+.history
+public/upload/*

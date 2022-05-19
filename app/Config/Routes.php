@@ -33,6 +33,25 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
+//route for management login
+$routes->get('/login','Login::index');
+$routes->post('/auth','Login::auth');
+
+$routes->get('/karyawans', 'Karyawans::index');
+$routes->post( 'karyawans/(:num)', 'Karyawans::upload/$1');
+$routes->post('/karyawans', 'Karyawans::add');
+$routes->put('/karyawans/(:num)', 'Karyawans::update/$1');
+$routes->delete( 'karyawans/(:num)', 'Karyawans::delete/$1');
+
+$routes->get('/users', 'Users::index');
+$routes->post('/users', 'Users::add');
+$routes->put('/users', 'Users::update');
+$routes->put('/change_pwd/', 'Users::updatePwd');
+$routes->delete('/users/(:num)', 'Users::delete/$1');
+
+$routes->get('/absens', 'Absens::index');
+$routes->post('/absens', 'Absens::add');
+$routes->put('/absens/(:num)', 'Absens::update/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
