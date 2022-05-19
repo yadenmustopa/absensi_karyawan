@@ -6,8 +6,8 @@ const prod = mode === 'production';
 
 module.exports = {
     entry: {
-        campaign: ['./src/campaign/main.js'],
-        template_1 : ['./src/template_1/main.js']
+        login: ['./src/login/main.js'],
+        home : ['./src/home/main.js']
     },
     resolve: {
         alias: {
