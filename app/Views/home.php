@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="descrition" content="Aplikasi sederhana memanage data karyawan"> 
     <meta name="author" content="Yaden Mustopa">
-    <meta name="author" content="Yaden Mustopa">
 
     <!-- Fonts and CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -25,7 +24,7 @@
 
     <script>
         window.config = {
-            base_url : <?= base_url() ?>
+            base_url : <?= base_url();?>
         }
     </script>
 </head>
@@ -35,8 +34,6 @@
         <nav class="navbar main-navbar navbar-expand-md navbar-dark fixed-top bg-primary">
             <a class="navbar-brand" href="<?= base_url(); ?>">
                 <img src="<?= base_url(); ?>/assets/images/logo.png" class="mr-1"/>
-                | Absensi Karyawan
-            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
