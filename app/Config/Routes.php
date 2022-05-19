@@ -46,12 +46,12 @@ $routes->delete( 'karyawans/(:num)', 'Karyawans::delete/$1');
 $routes->get('/users', 'Users::index');
 $routes->post('/users', 'Users::add');
 $routes->put('/users', 'Users::update');
-$routes->put('/change_pwd/', 'Users::updatePwd');
-$routes->delete('/users/(:num)', 'Users::delete/$1');
+$routes->patch('/change_pwd', 'Users::updatePwd');
+$routes->delete('/users', 'Users::delete');
 
 $routes->get('/absens', 'Absens::index');
 $routes->post('/absens', 'Absens::add');
-$routes->put('/absens/(:num)', 'Absens::update/$1');
+$routes->put('/absens', 'Absens::update');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
