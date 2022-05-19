@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\CheckApiKey;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -18,6 +19,7 @@ class Filters extends BaseConfig
      * @var array
      */
     public $aliases = [
+        'checkapikey'   => CheckApiKey::class,
         'csrf'          => CSRF::class,
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
@@ -33,6 +35,7 @@ class Filters extends BaseConfig
      */
     public $globals = [
         'before' => [
+            'checkapikey'
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
