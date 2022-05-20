@@ -11,7 +11,7 @@
         public function index()
         {
             $karyawans_model = new KaryawansModel();
-            $$sql            = $karyawans_model->findAll();
+            $sql            = $karyawans_model->findAll();
 
             $data = [ "data" => $sql ];
             return $this->successOutput( $data );
@@ -51,6 +51,7 @@
 
         public function update( $id )
         {
+
             // $validation =  \Config\Services::validation();
             $rules           =  $this->getRulesUpdate();
 
@@ -58,6 +59,7 @@
 
             if( ! $valid ) return $this->errorOutput( $valid["message"] );
 
+          
             $address         = $this->request->getVar('address');
             $position        = $this->request->getVar('position');
             $salary          = $this->request->getVar('salary');
@@ -95,6 +97,33 @@
 
 
             return $this->successOutput(["success" => true]);
+        }
+
+        /**
+         * @param id int
+         */
+        public function deleteImg( $user_id = 1  )
+        {
+            var_dump('cek');
+            $path = $this->getPathPhoto( $user_id );
+
+            if( $path === 'assets/avatar.png') return;
+
+            unlink( $path );
+            return;
+        }
+
+
+        private function getPathPhoto( $user_id )
+        {
+            $db      = \Config\Database::connect();
+            $builder = $db->table('karyawans');        // 'mytablename' is the name of your table
+
+            $builder->select('photo');       // names of your columns
+            $builder->where('user_id', $user_id );                // where clause
+            $query = $builder->get()->getFirstRow();
+
+            return $query->photo;
         }
 
 
