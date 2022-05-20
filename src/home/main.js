@@ -4,7 +4,7 @@
 
 "use strict";
 import './app.scss';
-import './soft-ui-dashboard.scss';
+// import './soft-ui-dashboard.scss';
 import App from './App.svelte';
 
 
