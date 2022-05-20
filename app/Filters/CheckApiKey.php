@@ -20,8 +20,8 @@ use Exception;
                 
             }else{
                 $ApiController   = new ApiController();
-                $api_key  = $_SERVER['HTTP_API_KEY'];
-                if( !$api_key || ! $_SERVER['HTTP_API_KEY'] ) return $ApiController->errorOutput("tidak di ijinkan mengakses", 401 );
+                $api_key  = $_SERVER['HTTP_KEY'];
+                if( !$api_key || ! $_SERVER['HTTP_KEY'] ) return $ApiController->errorOutput("tidak di ijinkan mengakses", 401 );
                 
                 
                 $check = $this->checkApiKey( $api_key );
