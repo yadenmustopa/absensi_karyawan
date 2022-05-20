@@ -14,15 +14,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
 
-    <!-- Icons -->
-<link href="<?= base_url();?>/assets/soft-ui/css/nucleo-icons.css" rel="stylesheet" />
-<link href="<?= base_url();?>/assets/soft-ui/css/nucleo-svg.css" rel="stylesheet" />
 
-<!-- Font Awesome Icons -->
-<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
 <!-- CSS Files -->
-<link id="pagestyle" href="<?= base_url();?>/assets/soft-ui/css/soft-ui-dashboard.css" rel="stylesheet" />
+    <link id="pagestyle" href="<?= base_url();?>/dist/soft-ui.css" rel="stylesheet" />
 
 
     <link rel="stylesheet" href="<?= base_url(); ?>/dist/home.css">
@@ -43,17 +40,17 @@
     </script>
 </head>
 <body class="g-sidenav-show bg-gray-100">
+    
+   
     <div id="app">
 
     </div>
+
+    
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <!-- Core -->
-<script src="<?= base_url()?>/assets/soft-ui/js/core/popper.min.js"></script>
-<script src="<?= base_url()?>/assets/soft-ui/js/core/bootstrap.min.js"></script>
-
-<!-- Theme JS -->
-<script src="<?= base_url()?>/assets/soft-ui/js/soft-ui-dashboard.min.js"></script>
+<script src="<?= base_url()?>/dist/soft-ui.js"></script>
 
 <script src="<?= base_url(); ?>/dist/home.js?_=<?= time(); ?>"></script>
 </html>
