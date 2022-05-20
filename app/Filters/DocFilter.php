@@ -1,7 +1,7 @@
 <?php
 	
 	
-	namespace CodeIgniter\Filters;
+	namespace App\Filters;
 	
 	
 	class DocFilter
