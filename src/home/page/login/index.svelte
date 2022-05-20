@@ -5,6 +5,9 @@
     import Rest from '../../modul/Request';
     import preloader from '../../lib/preloader';
     import Storage from '../../store/Storage';
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 
     let username;
     let password;
@@ -34,11 +37,14 @@
         let api_key = body.api_key;
         let data    = body.data;
 
-        // let Store = new Storage();
-        // Store._api_key = api_key;
+        let Store = new Storage();
+        // Store._api_key   = api_key;
         // Store._data_user = data;
+
+        localStorage.setItem('ak-key', api_key);
+        localStorage.setItem('ak-data-user', data );
         
-        window.location.reload();
+        dispatch( 'auth', { success : true } );
     }
 
 </script>

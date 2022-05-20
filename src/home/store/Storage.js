@@ -4,14 +4,14 @@ class Storage
 {
     constructor()
     {
-        this._api_key            = localStorage.getItem('ak_key');
-        this._data_user          = localStorage.getItem('ak_data_user');
+        this._api_key            = localStorage.getItem('ak-key');
+        this._data_user          = localStorage.getItem('ak-data-user');
     }
 
     removeStorage()
     {
-        localStorage.setItem('ak_key','');
-        localStorage.setItem('ak_data_user','');
+        localStorage.setItem('ak-key','');
+        localStorage.setItem('ak-data-user','');
     }
 
     /**
@@ -40,7 +40,8 @@ class Storage
      * @param { string } api_key
     */
         set apiKey(api_key){ 
-        localStorage.setItem('key', api_key);
+        console.log(api_key);
+        localStorage.setItem('ak-key', api_key);
     }
 
     /**
@@ -48,8 +49,9 @@ class Storage
     */
     set dataUser( data ){
         data = JSON.stringify(data);
+        console.log({ data });
 
-        localStorage.setItem('data_user', data);
+        localStorage.setItem('ak-data-user', data);
     }
 
 }
