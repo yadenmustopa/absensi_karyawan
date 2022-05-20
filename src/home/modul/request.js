@@ -31,7 +31,9 @@ class Request
     
     /**
      * 
-     * @param {*} data 
+     * @param { Object } data 
+     * @param { String } data.username
+     * @param { String } data.password
      * 
      * @returns { Promise }
      */
@@ -183,3 +185,6 @@ class Request
     }
 
 }
+
+
+export default Request;

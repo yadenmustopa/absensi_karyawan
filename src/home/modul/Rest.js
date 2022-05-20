@@ -1,5 +1,6 @@
 import {Rest} from "@keyos/api-sdk";
 import Swal from 'sweetalert2'
+import preloader from '../lib/preloader';
 
 class KeyOSApi {
 
@@ -42,6 +43,7 @@ class KeyOSApi {
         return RestApi.call(request).catch((err) => {
             let body = err.getBody();
             
+            preloader.hide();
 
             //open Sweet alert when errord detected
 

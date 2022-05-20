@@ -1,15 +1,44 @@
 <script>
-    import Rest from '../../modul/Rest';
+
+    "use strict";
+
+    import Rest from '../../modul/Request';
+    import preloader from '../../lib/preloader';
+    import Storage from '../../store/Storage';
 
     let username;
     let password;
 
     function login()
     {
-        let Req = new Rest();
+        let Req      = new Rest();
+        let data     = { username, password }
+        let request  = Req.auth( data );
 
+        preloader.show();
+
+        request.then( ( res ) => {
+            let body  = res.getBody();
+            setToStore( body );
+            preloader.hide();
+        } )
         
-      
+        
+    }
+
+    /**
+     * 
+     * @param { Object } data
+     */
+    function setToStore( body = {} ){
+        let api_key = body.api_key;
+        let data    = body.data;
+
+        // let Store = new Storage();
+        // Store._api_key = api_key;
+        // Store._data_user = data;
+        
+        window.location.reload();
     }
 
 </script>
