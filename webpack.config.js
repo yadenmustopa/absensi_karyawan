@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const mode = process.env.NODE_ENV || 'development';
@@ -6,8 +7,7 @@ const prod = mode === 'production';
 
 module.exports = {
     entry: {
-        login: ['./src/login/main.js'],
-        home : ['./src/home/main.js']
+        home: ['./src/home/main.js'],
     },
     resolve: {
         alias: {
@@ -34,40 +34,71 @@ module.exports = {
                     }
                 }
             },
+            
             {
-                test: /\.(sa|sc|c)ss$/,
+                test: /\.css$/,
                 use: [
-                    'style-loader',
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            // `postcssOptions` is needed for postcss 8.x;
-                            // if you use postcss 7.x skip the key
-                            postcssOptions: {
-                              // postcss plugins, can be exported to postcss.config.js
-                              plugins: function () {
-                                return [
-                                  require('autoprefixer')
-                                ];
-                              }
-                            }
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sassOptions: {
-                                includePaths: [
-                                    './src/material-ui-theme',
-                                    './node_modules'
-                                ]
-                            }
-                        }
+                  (mode === 'development' ? 'style-loader' : {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                      publicPath: '../'
                     }
-                ]
-            }
+                  }),
+                  'css-loader',
+                  'postcss-loader',
+                ],
+              },
+              {
+                test: /\.styl(us)?$/,
+                use: [
+                  (mode === 'development' ? 'style-loader' : {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                      publicPath: '../'
+                    }
+                  }),
+                  'css-loader',
+                  'postcss-loader',
+                  'stylus-loader',
+                ],
+              },
+              {
+                test: /\.less$/,
+                use: [
+                  (mode === 'development' ? 'style-loader' : {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                      publicPath: '../'
+                    }
+                  }),
+                  'css-loader',
+                  'postcss-loader',
+                  'less-loader',
+                ],
+              },
+              {
+                test: /\.(sa|sc)ss$/,
+                use: [
+                  (mode === 'development' ? 'style-loader' : {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                      publicPath: '../'
+                    }
+                  }),
+                  'css-loader',
+                  'postcss-loader',
+                  'sass-loader',
+                ],
+              },
+              {
+                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                loader: 'url-loader',
+                options: {
+                  limit: 10000,
+                  name: 'images/[name].[ext]',
+        
+                },
+              },
         ]
     },
     mode,
@@ -75,7 +106,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: '[name].css',
             chunkFilename: '[name].[id].css'
-        })
+        }),
     ],
     devtool: prod ? false: 'source-map',
     watchOptions: {
