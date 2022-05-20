@@ -49,10 +49,10 @@
 
 
             $data = [ 
-                "user_id"   => $user_id,
-                "status"    => $status,
+                "user_id"     => $user_id,
+                "status"      => $status,
                 "description" => $description,
-                "created_at" => $now,
+                "created_at"  => $now,
             ];
 
             $AbsenModel = new AbsensModel();
@@ -61,25 +61,23 @@
             return $this->successOutput([]);
         }
 
-        public function update()
+        public function update( $absen_id )
         {
             $rules       = $this->getRules();
             $validation  = $this->validation( $rules );
 
             if( ! $validation["success"] ) return $this->errorOutput( $validation['message'] );
 
-            $user_id      = $this->request->getPost("user_id");
             $status       = $this->request->getPost("status");
             $description  = $this->request->getPost("description");
 
             $data = [ 
-                "user_id"   => $user_id,
                 "status"    => $status,
                 "description" => $description,
             ];
 
             $AbsenModel = new AbsensModel();
-            $AbsenModel->insert( $data );
+            $AbsenModel->update( $absen_id, $data );
 
             return $this->successOutput([]);
         }
