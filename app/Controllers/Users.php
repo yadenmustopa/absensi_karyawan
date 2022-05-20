@@ -4,6 +4,7 @@
     use CodeIgniter\Controller;
     use App\Models\UsersModel;
     use App\Models\KaryawansModel;
+    use App\Controllers\Karyawans;
     use CodeIgniter\I18n\Time;
 
     class Users extends ApiController
@@ -53,7 +54,6 @@
                 "updated_at" => $now,
             ];
 
-            var_dump( $data );
             $UsersModel = new UsersModel();
             $UsersModel->insert( $data );
             
@@ -62,7 +62,7 @@
         }
 
 
-        public function update()
+        public function update( $id )
         {
             $rules       = $this->getRulesUpdate();
             $validation  = $this->validation( $rules );
@@ -70,7 +70,6 @@
             if( ! $validation["success"] ) return $this->errorOutput( $validation['message'] );
 
             $name = $this->request->getVar('name');
-            $id   = $this->request->getVar('user_id');
             $now  = Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $UsersModel = new UsersModel();
@@ -184,18 +183,19 @@
         }
 
 
-        public function delete(){
-
-            $id = $this->request->getVar( "user_id");
+        public function delete( $id ){
 
             $UsersModel = new UsersModel();
             $UsersModel->db->transBegin();
 
             $UsersModel->delete( $id );
+            var_dump('tara');
+            $Karyawans = new Karyawans();
+            $Karyawans->deleteImg( $id );
+            var_dump('cek');
             $KaryawanModel = new KaryawansModel();
             $KaryawanModel->where('user_id', $id )->delete();
 
-            
             $UsersModel->db->transComplete();
 
             if( $UsersModel->db->transStatus() === false ){
