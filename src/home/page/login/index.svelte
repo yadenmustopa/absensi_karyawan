@@ -44,7 +44,7 @@
         localStorage.setItem('ak-key', api_key);
         localStorage.setItem('ak-data-user', data );
         
-        dispatch( 'auth', { success : true } );
+        dispatch( 'auth', { data : data } );
     }
 
 </script>

@@ -1,7 +1,24 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import Aside from './layout/aside.svelte';
+    import Main from './layout/main.svelte';
+    import Fixed from './layout/fixed.svelte';
+
+    import { createEventDispatcher, onMount } from 'svelte';
 
     const dispatch = createEventDispatcher();
+    export let status = "";
+
+    const HAK_AKSES_ADMIN = ['DASHBOARD','USER'];
+    const HAK_AKSES_KARYAWAN = [];
+
+    onMount( ()=>{
+       init();
+       
+    });
+
+    function init(){
+ 
+    }
 
     function logout()
     {
@@ -13,5 +30,14 @@
     }
 </script>
 
-<h1>Selamat datang di Dashboard</h1>
-<button class="btn btn-danger" on:click={ logout }></button>
+<Aside></Aside>
+<!-- <Main></Main>
+<Fixed></Fixed> -->
+
+
+
+
+
+
+
+ 

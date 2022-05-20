@@ -68,7 +68,9 @@ const config = {
                 files : [
                     "./public/assets/soft-ui/js/core/popper.min.js",
                     "./public/assets/soft-ui/js/core/bootstrap.min.js",
-                    "./public/assets/soft-ui/js/soft-ui-dashboard.min.js",
+                    "./public/assets/soft-ui/js/plugins/perfect-scrollbar.min.js",
+                    "./public/assets/soft-ui/js/plugins/smooth-scrollbar.min.js",
+                    "./public/assets/soft-ui/js/plugins/chartjs.min.js",
                 ],
                 output : "./public/dist/soft-ui.js",
                 // if true then content of file will be inside a javascript closure function. ()()

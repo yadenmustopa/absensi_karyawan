@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="descrition" content="Aplikasi sederhana memanage data karyawan"> 
     <meta name="author" content="Yaden Mustopa">
@@ -39,10 +38,10 @@
         }
     </script>
 </head>
-<body class="g-sidenav-show bg-gray-100">
+<body >
     
    
-    <div id="app">
+    <div id="app" class="g-sidenav-show bg-gray-100">
 
     </div>
 
@@ -53,4 +52,15 @@
 <script src="<?= base_url()?>/dist/soft-ui.js"></script>
 
 <script src="<?= base_url(); ?>/dist/home.js?_=<?= time(); ?>"></script>
+
+<script>
+
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+    var options = {
+        damping: '0.5'
+    }
+    Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+</script>
 </html>
