@@ -1,10 +1,15 @@
 <script>
+    import Rest from '../../modul/Rest';
+
     let username;
     let password;
 
     function login()
     {
+        let Req = new Rest();
+
         
+      
     }
 
 </script>
@@ -16,11 +21,10 @@
                     <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
                         <div class="card card-plain mt-8">
                             <div class="card-header pb-0 text-left bg-transparent">
-                                <h3 class="font-weight-bolder text-info text-gradient">Welcome back</h3>
-                                <p class="mb-0">Enter your Username and password to log in</p>
+                                <h3 class="font-weight-bolder text-info text-gradient text-center">Welcome</h3>
                             </div>
 
-                            <div class="card-body">
+                            <div class="card-body pt-0">
                                 <form role="form">
                                     <label>Username</label>
                                     <div class="mb-3">
