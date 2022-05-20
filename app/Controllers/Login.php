@@ -38,7 +38,7 @@
             $api_key = ApiKey::generate( $username, $password );
 
 
-            $data = [ "api_key" => $api_key, "data" => $check["data"] ];
+            $data = [ "api_key" => $api_key, "data" => $check["data"][0] ];
             return $this->successOutput( $data );
         }
 
