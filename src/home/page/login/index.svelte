@@ -40,9 +40,8 @@
         let Store = new Storage();
         // Store._api_key   = api_key;
         // Store._data_user = data;
-
         localStorage.setItem('ak-key', api_key);
-        localStorage.setItem('ak-data-user', data );
+        localStorage.setItem('ak-data-user', JSON.stringify( data ) );
         
         dispatch( 'auth', { data : data } );
     }

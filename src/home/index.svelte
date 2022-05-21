@@ -7,9 +7,8 @@
 
     const dispatch = createEventDispatcher();
     export let status = "";
+    let menu_active = 'dashboard';
 
-    const HAK_AKSES_ADMIN = ['DASHBOARD','USER'];
-    const HAK_AKSES_KARYAWAN = [];
 
     onMount( ()=>{
        init();
@@ -28,11 +27,17 @@
         dispatch('logout',{ logout : true });
 
     }
+
+    function changeMenu( e ){
+        menu_active = e.detail.menu_active ;
+    }
 </script>
 
-<Aside></Aside>
-<!-- <Main></Main>
-<Fixed></Fixed> -->
+<Aside status = { status } on:change = {  changeMenu }></Aside>
+<Main menu_active = { menu_active }></Main>
+<!-- <Fixed></Fixed>  -->
+
+<button on:click={ logout } class="btn-danger">Logout</button>
 
 
 

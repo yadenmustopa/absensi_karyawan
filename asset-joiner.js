@@ -78,7 +78,7 @@ const config = {
                 // if true then content of all file will be inside javascript closure function
                 use_closure_all : false,
                 // compress output into minified version
-                minify : true,
+                // minify : true,
                 // @see : <https://www.npmjs.com/package/terser#compress-options>
                 // minify_options : {
                 //     format : {

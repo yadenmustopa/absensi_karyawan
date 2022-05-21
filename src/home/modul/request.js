@@ -39,7 +39,7 @@ class Request
      */
     auth( data = { } )
     {
-        return this.request('/auth','POST',null, data )
+        return this.request('/auth','POST',null, data ) 
     }
 
     /**

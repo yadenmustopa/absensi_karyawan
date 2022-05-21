@@ -27,9 +27,6 @@
      */
     function changeCurrentPage( page = 'login' ){
         current_page = page;
-        let data_user = localStorage.getItem('ak-data-user');
-
-        console.log({ data_user });
     }
 
 
@@ -44,5 +41,5 @@
 { #if ( current_page === 'login' ) }
     <Login on:auth = { auth }></Login>
 { :else }
-    <Home on:logout = { () => { changeCurrentPage('login') } }></Home>
+    <Home on:logout = { () => { changeCurrentPage('login') } } status ></Home>
 { /if }

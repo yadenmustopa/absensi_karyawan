@@ -1,4 +1,4 @@
-const MENU_ADMIN = [
+const admin = [
     {
         icon : 'fas fa-chart-line',
         name : 'DASHBOARD',
@@ -10,8 +10,35 @@ const MENU_ADMIN = [
         href  : 'user',
     },
     {
-        icon : 'fas fa-comment-alt-smile"',
+        icon : 'fas fa-check',
         name : 'ABSENSI',
         href : 'absen'
     }
 ];
+
+const karyawan = [
+    {
+        icon : 'fas fa-chart-line',
+        name : 'DASHBOARD',
+        href : 'dashboard'
+    },
+];
+
+/**
+ * 
+ * @param { String } status 
+ * @returns 
+ */
+function getMenu( status = 'admin' ){
+
+    status = status.toLowerCase();
+
+    console.log({ status });
+    if( status === 'admin' ){
+        return admin;
+    }else{
+        return karyawan;
+    }
+}
+
+export default getMenu;
