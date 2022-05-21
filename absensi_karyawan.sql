@@ -14,12 +14,10 @@
 
 
 -- Membuang struktur basisdata untuk absen_karyawan
-DROP DATABASE IF EXISTS `absen_karyawan`;
 CREATE DATABASE IF NOT EXISTS `absen_karyawan` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `absen_karyawan`;
 
 -- membuang struktur untuk table absen_karyawan.absens
-DROP TABLE IF EXISTS `absens`;
 CREATE TABLE IF NOT EXISTS `absens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
@@ -41,7 +39,6 @@ INSERT INTO `absens` (`id`, `user_id`, `status`, `description`, `created_at`, `u
 /*!40000 ALTER TABLE `absens` ENABLE KEYS */;
 
 -- membuang struktur untuk table absen_karyawan.karyawans
-DROP TABLE IF EXISTS `karyawans`;
 CREATE TABLE IF NOT EXISTS `karyawans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
@@ -65,7 +62,6 @@ INSERT INTO `karyawans` (`id`, `user_id`, `address`, `position`, `created_at`, `
 /*!40000 ALTER TABLE `karyawans` ENABLE KEYS */;
 
 -- membuang struktur untuk table absen_karyawan.migrations
-DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `version` varchar(255) NOT NULL,
@@ -87,7 +83,6 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
 -- membuang struktur untuk table absen_karyawan.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT '0',
@@ -95,16 +90,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` int(15) DEFAULT 0,
   `username` varchar(20) DEFAULT '0',
   `password` varchar(50) DEFAULT '0',
-  `status` enum('ADMIN','KARYAWAN') DEFAULT 'KARYAWAN',
+  `role` enum('ADMIN','KARYAWAN') DEFAULT 'KARYAWAN',
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
-  KEY `status` (`status`)
+  KEY `status` (`role`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Membuang data untuk tabel absen_karyawan.users: ~2 rows (lebih kurang)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `name`, `updated_at`, `created_at`, `username`, `password`, `status`) VALUES
+INSERT INTO `users` (`id`, `name`, `updated_at`, `created_at`, `username`, `password`, `role`) VALUES
 	(00000000001, 'aduh', 1652945432, 1652937485, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'ADMIN');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
