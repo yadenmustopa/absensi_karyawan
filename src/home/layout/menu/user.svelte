@@ -45,21 +45,21 @@
     <div class="col-lg-8 col-sm-12 wrap-content">
         { #each users as user }
             <div class="card card-background-mask-info p-4">
-                <div class="card-title">
+                <div class="card-title text-bold border-bottom">
                     { user.name }
                 </div>
                 <div class="card-body row">
-                    <div class="col-4 wrap-image">
+                    <div class="col-lg-4 col-sm-12  wrap-image">
                         
                         <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
                     </div>
-                    <div class="col-8 wrap info p-2">
+                    <div class="col-lg-8 col-sm-12 wrap info p-2">
                         <div>{ user.address }</div>                        
                         <div>{ user.no_hp }</div>                        
                         <div>{ user.salary }</div>                        
                     </div>
                 </div>
-                <hr/>
+               
             </div>
         { :else }
             <div class="alert alert-dark">Data tidak di temukan</div>
