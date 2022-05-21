@@ -29,14 +29,7 @@ CREATE TABLE IF NOT EXISTS `absens` (
   KEY `status` (`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Membuang data untuk tabel absen_karyawan.absens: ~3 rows (lebih kurang)
-DELETE FROM `absens`;
-/*!40000 ALTER TABLE `absens` DISABLE KEYS */;
-INSERT INTO `absens` (`id`, `user_id`, `status`, `description`, `created_at`, `updated_at`) VALUES
-	(1, 2, 'IZIN', NULL, 1652947728, NULL),
-	(2, 2, 'IZIN', NULL, 1652947888, NULL),
-	(3, 2, 'IZIN', NULL, 1652947909, NULL);
-/*!40000 ALTER TABLE `absens` ENABLE KEYS */;
+-- Pengeluaran data tidak dipilih.
 
 -- membuang struktur untuk table absen_karyawan.karyawans
 CREATE TABLE IF NOT EXISTS `karyawans` (
@@ -54,12 +47,7 @@ CREATE TABLE IF NOT EXISTS `karyawans` (
   KEY `no_hp` (`no_hp`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Membuang data untuk tabel absen_karyawan.karyawans: ~1 rows (lebih kurang)
-DELETE FROM `karyawans`;
-/*!40000 ALTER TABLE `karyawans` DISABLE KEYS */;
-INSERT INTO `karyawans` (`id`, `user_id`, `address`, `position`, `created_at`, `updated_at`, `no_hp`, `salary`, `photo`) VALUES
-	(4, 1, 'Kp Bacot', 'CTO', 1652942712, 1652942712, '08545656444', 5000000, 'assets/avatar.png');
-/*!40000 ALTER TABLE `karyawans` ENABLE KEYS */;
+-- Pengeluaran data tidak dipilih.
 
 -- membuang struktur untuk table absen_karyawan.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
@@ -73,14 +61,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Membuang data untuk tabel absen_karyawan.migrations: ~2 rows (lebih kurang)
-DELETE FROM `migrations`;
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`, `batch`) VALUES
-	(1, '2022-05-18-123135', 'App\\Database\\Migrations\\Users', 'default', 'App', 1652937438, 1),
-	(2, '2022-05-18-123158', 'App\\Database\\Migrations\\Karyawans', 'default', 'App', 1652937438, 1),
-	(3, '2022-05-18-123214', 'App\\Database\\Migrations\\Absens', 'default', 'App', 1652937438, 1);
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+-- Pengeluaran data tidak dipilih.
 
 -- membuang struktur untuk table absen_karyawan.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -96,12 +77,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `status` (`role`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Membuang data untuk tabel absen_karyawan.users: ~2 rows (lebih kurang)
-DELETE FROM `users`;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `name`, `updated_at`, `created_at`, `username`, `password`, `role`) VALUES
-	(00000000001, 'aduh', 1652945432, 1652937485, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'ADMIN');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+-- Pengeluaran data tidak dipilih.
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

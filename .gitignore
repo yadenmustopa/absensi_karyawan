@@ -132,3 +132,4 @@ nb-configuration.xml
 .history
 public/upload/*
 public/dist/*
+.routify
