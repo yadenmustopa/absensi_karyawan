@@ -1,4 +1,6 @@
 "use strict";
+console.log("test library");
+
 (function() {
   var isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
 
@@ -403,8 +405,12 @@ let referenceButtons = document.querySelector('[data-class]');
 window.addEventListener("resize", navbarColorOnResize);
 
 function navbarColorOnResize() {
+console.log({ sidenav});
+	
   if (window.innerWidth > 1200) {
     if (referenceButtons.classList.contains('active') && referenceButtons.getAttribute('data-class') === 'bg-transparent') {
+		console.log({ sidenav});
+		
       sidenav.classList.remove('bg-white');
     } else {
       sidenav.classList.add('bg-white');
@@ -423,6 +429,8 @@ function sidenavTypeOnResize() {
   let elements = document.querySelectorAll('[onclick="sidebarType(this)"]');
   if (window.innerWidth < 1200) {
     elements.forEach(function(el) {
+		console.log( { el })
+		
       el.classList.add('disabled');
     });
   } else {

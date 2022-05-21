@@ -98,3 +98,15 @@
 .container{
     height: 100% !important;
 }
+
+.btn-round.btn-icon{
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    padding:6px;
+}
+
+.modal {
+    z-index: 9999999;
+    background: #000;
+}

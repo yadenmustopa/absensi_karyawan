@@ -12,9 +12,23 @@
         public function index()
         {
             $search        = $this->request->getGet('search');
+            $identity      = $this->request->getGet('with_identity');
+            $search        = trim( $search );
+            $response      = [];
 
-            $$search = trim( $search );
+            if( $identity === "Y"){
+                $response = $this->withIdentity( $search );
+            }else{
+                $response = $this->noIdentity( $search );
+            }
+            
+           
 
+            $data = ["data" => $response ];
+            return $this->successOutput( $data, 200 ) ;
+        }
+
+        private function withIdentity( $search = ""){
             $users_model = new UsersModel();
             $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary` FROM `users` JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
 
@@ -22,13 +36,16 @@
             if( $search ){
                 $base .= " WHERE `users`.`name` LIKE '%$search%' OR  `users`.`username` LIKE '% $search%' OR `karyawans`.`address` LIKE '%$search%'  ";
             }
-            
+
             $sql = $users_model->db->query( $base );
 
-            $response = $sql->getResult('array');
+            return $sql->getResult('array');
+        }
 
-            $data = ["data" => $response ];
-            return $this->successOutput( $data, 200 ) ;
+        private function noIdentity( $search ){
+
+            $UsersModel  = new UsersModel();
+            return $UsersModel->like("name")->get()->getResultArray();
         }
 
 
@@ -41,6 +58,7 @@
 
             $name     = $this->request->getPost("name");
             $username = $this->request->getPost("username");
+            $username = $this->request->getPost("confirmation_password");
             $password = $this->request->getPost("password");
             $role     = $this->request->getPost("role");
             $now      = Time::now('Asia/Jakarta','id')->getTimestamp();

@@ -5,6 +5,7 @@
 	import Dashboard from './menu/dashboard.svelte';
 	import User 	 from './menu/user.svelte';
 	import Absen 	 from './menu/absen.svelte';
+	import Karyawan 	 from './menu/karyawan.svelte';
 	import redirect  from '../lib/redirect-page';
 
 	const dispatch = createEventDispatcher();
@@ -46,6 +47,7 @@
 		{ #if role === 'ADMIN' }
 			<User></User>
 			<Absen></Absen>
+			<Karyawan></Karyawan>
 		{ /if }	
       <!-- <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">

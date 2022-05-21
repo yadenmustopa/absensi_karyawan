@@ -10,6 +10,11 @@ const admin = [
         href  : 'user',
     },
     {
+        icon : 'fas fa-smile',
+        name : 'DATA KARYAWAN',
+        href  : 'karyawan',
+    },
+    {
         icon : 'fas fa-check',
         name : 'ABSENSI',
         href : 'absen'

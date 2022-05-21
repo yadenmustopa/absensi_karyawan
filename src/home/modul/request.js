@@ -111,7 +111,7 @@ class Request
      * @returns { Promise [{}]}
      */
     addUsers( data = {} ){
-        return this.request('/user', "POST", null, data , { "key" : this.api_key });
+        return this.request('/users', "POST", null, data , { "key" : this.api_key });
     }
 
     /**
