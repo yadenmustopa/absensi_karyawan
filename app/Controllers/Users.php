@@ -16,7 +16,7 @@
             $$search = trim( $search );
 
             $users_model = new UsersModel();
-            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`status`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photos` FROM `users` JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
+            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photos` FROM `users` JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
 
             
             if( $search ){
@@ -42,14 +42,14 @@
             $name     = $this->request->getPost("name");
             $username = $this->request->getPost("username");
             $password = $this->request->getPost("password");
-            $status   = $this->request->getPost("status");
+            $role     = $this->request->getPost("role");
             $now      = Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $data = [
                 "name"       => $name,
                 "username"   => $username,
                 "password"   => sha1( $password ),
-                "status"     => $status,
+                "role"       => $role,
                 "created_at" => $now,
                 "updated_at" => $now,
             ];
@@ -70,6 +70,7 @@
             if( ! $validation["success"] ) return $this->errorOutput( $validation['message'] );
 
             $name = $this->request->getVar('name');
+            $role = $this->request->getVar('role');
             $now  = Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $UsersModel = new UsersModel();
@@ -117,7 +118,7 @@
                         "required" => "{field} tidak boleh kosong",
                     ]
                 ],
-                'status' => [
+                'role' => [
                     'rules' => 'required',
                     'errors' => [
                         "required" => "{field} tidak boleh kosong",

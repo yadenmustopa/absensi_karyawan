@@ -6,7 +6,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
 
     const dispatch = createEventDispatcher();
-    export let status = "";
+    export let role = "";
     let menu_active = 'dashboard';
 
 
@@ -28,7 +28,7 @@
     }
 </script>
 
-<Aside status = { status } on:change = {  changeMenu }></Aside>
+<Aside status = { role } on:change = {  changeMenu }></Aside>
 <Main menu_active = { menu_active } on:logout = { triggerLogout } ></Main>
 <!-- <Fixed></Fixed>  -->
 

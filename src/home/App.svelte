@@ -10,7 +10,7 @@
 
     let page=['login','home'];
     let current_page = 'home';
-    let status ;
+    let role ;
 
     const API_KEY = localStorage.getItem('ak-key');
 
@@ -33,7 +33,7 @@
     function auth( e ){
         changeCurrentPage('home');
         let data = e.detail.data;
-        status   = data.status;
+        role     = data.role;
     }
 
 </script>
@@ -41,5 +41,5 @@
 { #if ( current_page === 'login' ) }
     <Login on:auth = { auth }></Login>
 { :else }
-    <Home on:logout = { () => { changeCurrentPage('login') } } status ></Home>
+    <Home on:logout = { () => { changeCurrentPage('login') } } role = { role } ></Home>
 { /if }

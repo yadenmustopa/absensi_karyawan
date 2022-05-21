@@ -5,13 +5,13 @@
 
     const dispatch = createEventDispatcher();
 
-    let status;
+    let role;
 
     let menus = [];
     let menu_active = "dashboard";
 
-    $:if( status ){
-        menus = getMenu( status );
+    $:if( role ){
+        menus = getMenu( role );
     }
 
     starter();
@@ -23,7 +23,7 @@
     function getStatus(){
         let data_user = JSON.parse(localStorage.getItem('ak-data-user'));
 
-        status = data_user.status;
+        role = data_user.role;
     }
 
     function changeMenu( active ){

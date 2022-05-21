@@ -10,7 +10,7 @@
         // protected $useAutoIncrement = true;
         protected $returnType = 'array';
 
-        protected $allowedFields = ['name','username','password','created_at','updated_at'];
+        protected $allowedFields = ['name','username','password','created_at','updated_at','role'];
         protected $useSoftDeletes = false;
         protected $useTimestamp = true;
 

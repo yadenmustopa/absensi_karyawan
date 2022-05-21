@@ -5,7 +5,7 @@ class Request
  
 
     constructor(){
-        this.api_key = localStorage.getItem('ak-api-key') || "";
+        this.api_key = localStorage.getItem('ak-key') || "";
     }
 
     /**
@@ -131,6 +131,8 @@ class Request
      * 
      * @param { Number } user_id 
      * @param { Object } data 
+     * @param { String } data.name 
+     * @param { String } data.role
      * @returns 
      */
     updateUsers( user_id = 0 , data = {} ){

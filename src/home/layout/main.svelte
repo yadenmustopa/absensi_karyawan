@@ -4,7 +4,8 @@
 	import Nav 		 from './nav.svelte';
 	import Dashboard from './menu/dashboard.svelte';
 	import User 	 from './menu/user.svelte';
-	import absen 	 from './menu/absen.svelte';
+	import Absen 	 from './menu/absen.svelte';
+	import redirect  from '../lib/redirect-page';
 
 	const dispatch = createEventDispatcher();
 
@@ -12,11 +13,11 @@
 
 	let data_user;
 	let user;
-	let hak_akses;
+	let role;
 
     $:if( menu_active ){
-      	console.log({ menu_active });
-      	menu_active = menu_active;
+		console.log({ menu_active });
+		redirect( menu_active );
     }
 
 	starter();
@@ -24,10 +25,11 @@
 	function starter(){
 		data_user = JSON.parse( localStorage.getItem('ak-data-user') ); 
 		user      = data_user.name;
-		hak_akses =  
+
+		role      = data_user.role;
+		
+		console.log({ role });
 	}
-
-
 
 
 </script>
@@ -40,7 +42,12 @@
     <div class="container-fluid py-4">
 
 		<Dashboard data_user = { data_user }></Dashboard>
-      <div class="row">
+
+		{ #if role === 'ADMIN' }
+			<User></User>
+			<Absen></Absen>
+		{ /if }	
+      <!-- <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-body p-3">
@@ -129,8 +136,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row mt-4">
+      </div> -->
+      <!-- <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
           <div class="card">
             <div class="card-body p-3">
@@ -684,6 +691,6 @@
             </div>
           </div>
         </div>
-      </footer>
+      </footer> -->
     </div>
   </main>
