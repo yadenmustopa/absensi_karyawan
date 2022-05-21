@@ -5,6 +5,8 @@
     import Storage from './store/Storage';
     import Home from "./index.svelte";
 
+
+
     const Store = new Storage();
     const dispatch = new createEventDispatcher();
 

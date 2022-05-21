@@ -16,7 +16,7 @@
             $$search = trim( $search );
 
             $users_model = new UsersModel();
-            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photos` FROM `users` JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
+            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary` FROM `users` JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
 
             
             if( $search ){

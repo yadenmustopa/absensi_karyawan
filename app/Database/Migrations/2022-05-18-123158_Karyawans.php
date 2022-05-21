@@ -10,19 +10,19 @@ class Karyawans extends Migration
 
     public function up()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `$this->table`(
+        $sql = "CREATE TABLE IF NOT EXISTS `$this->table` (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
             `user_id` INT(11) NULL DEFAULT NULL,
-            `address` VARCHAR(50) NULL DEFAULT NULL,
-            `position` ENUM('CEO','CTO','CFO','CMO','COO','WPP') NULL DEFAULT 'CEO',
+            `address` VARCHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+            `position` ENUM('CEO','CTO','CFO','CMO','COO','WPP') NULL DEFAULT 'CEO' COLLATE 'latin1_swedish_ci',
             `created_at` INT(11) NULL DEFAULT NULL,
             `updated_at` INT(11) NULL DEFAULT NULL,
-            `no_hp` VARCHAR(50) NULL DEFAULT NULL,
+            `no_hp` VARCHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
             `salary` INT(11) NULL DEFAULT NULL COMMENT 'per month',
-            `photo` LONGTEXT NULL DEFAULT 'assets/avatar.png',
-            PRIMARY KEY (`id`),
-            INDEX `address` (`address`),
-            INDEX `no_hp` (`no_hp`)
+            `photo` LONGTEXT NULL DEFAULT 'assets/images/avatar.png' COLLATE 'latin1_swedish_ci',
+            PRIMARY KEY (`id`) USING BTREE,
+            INDEX `address` (`address`) USING BTREE,
+            INDEX `no_hp` (`no_hp`) USING BTREE
         )";
 
         $this->db->query( $sql );

@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `karyawans` (
   `updated_at` int(11) DEFAULT NULL,
   `no_hp` varchar(50) DEFAULT NULL,
   `salary` int(11) DEFAULT NULL COMMENT 'per month',
-  `photo` longtext DEFAULT 'assets/avatar.png',
+  `photo` longtext DEFAULT 'assets/images/avatar.png',
   PRIMARY KEY (`id`),
   KEY `address` (`address`),
   KEY `no_hp` (`no_hp`)

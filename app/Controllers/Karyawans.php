@@ -107,7 +107,7 @@
             var_dump('cek');
             $path = $this->getPathPhoto( $user_id );
 
-            if( $path === 'assets/avatar.png') return;
+            if( $path === 'assets/images/avatar.png') return;
 
             unlink( $path );
             return;

@@ -23,11 +23,13 @@
         request.then( ( res )=>{
             let body = res.getBody();
             users = body.data;
+
+            console.log({ users });
         });
     }
 </script>
 
-<div class="row mt-4 d-none container page-user">
+<div class="row mt-4 d-none page page-user">
     
     <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4">
         <div class="card h-100 p-3">
@@ -42,8 +44,22 @@
     </div>
     <div class="col-lg-8 col-sm-12 wrap-content">
         { #each users as user }
-            <div class="card card-background-mask-info">
-                { user.name }
+            <div class="card card-background-mask-info p-4">
+                <div class="card-title">
+                    { user.name }
+                </div>
+                <div class="card-body row">
+                    <div class="col-4 wrap-image">
+                        
+                        <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                    </div>
+                    <div class="col-8 wrap info p-2">
+                        <div>{ user.address }</div>                        
+                        <div>{ user.no_hp }</div>                        
+                        <div>{ user.salary }</div>                        
+                    </div>
+                </div>
+                <hr/>
             </div>
         { :else }
             <div class="alert alert-dark">Data tidak di temukan</div>
