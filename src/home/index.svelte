@@ -19,25 +19,18 @@
  
     }
 
-    function logout()
-    {
-        localStorage.setItem('ak-key','');
-        localStorage.setItem('ak-data-user','');
-
-        dispatch('logout',{ logout : true });
-
-    }
-
     function changeMenu( e ){
         menu_active = e.detail.menu_active ;
+    }
+
+    function triggerLogout(){
+        dispatch( 'logout', { "logout" : true });
     }
 </script>
 
 <Aside status = { status } on:change = {  changeMenu }></Aside>
-<Main menu_active = { menu_active }></Main>
+<Main menu_active = { menu_active } on:logout = { triggerLogout } ></Main>
 <!-- <Fixed></Fixed>  -->
-
-<button on:click={ logout } class="btn-danger">Logout</button>
 
 
 
