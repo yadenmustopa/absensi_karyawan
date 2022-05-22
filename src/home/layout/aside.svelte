@@ -53,7 +53,7 @@
             
             { #each menus as menu }
                 <li class="nav-item">
-                    <a class="nav-link  { menu.href === menu_active ? 'active' : '' }" href="#" on:click = { () => { changeMenu( menu.href ) } }>
+                    <a class="nav-link  { menu.href === menu_active ? 'active' : '' }" href="javascript:;" on:click = { () => { changeMenu( menu.href ) } }>
 
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class={ menu.icon }></i>
