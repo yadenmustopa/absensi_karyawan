@@ -21,7 +21,7 @@ class FirstUser extends Seeder
             'name'=>'ADMIN',
             'username' => 'admin',
             'password' => $password, 
-            'status' => 'ADMIN',
+            'role' => 'ADMIN',
             'created_at' => $now,
             'updated_at' => $now
         ];
