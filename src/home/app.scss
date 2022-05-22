@@ -110,3 +110,15 @@
     z-index: 9999999;
     background: #000;
 }
+
+.swal2-containera{
+    z-index:9999999;
+}
+
+.input-group .input-group-text{
+    z-index: 99;
+}
+
+.g-sidenav-show .navbar:not(.sidenav).navbar-main .navbar-collapse, .g-sidenav-show .navbar:not(.mixed-navbar) .navbar-collapse{
+    align-items: flex-start;
+}
