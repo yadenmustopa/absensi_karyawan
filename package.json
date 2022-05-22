@@ -12,7 +12,7 @@
     "webpack-watch": "webpack --watch",
     "join-asset": "node asset-joiner.js",
     "run-dev-server": "php spark serve --port 9092",
-    "dev:routify" : "routify"
+    "dev:routify": "routify"
   },
   "repository": {
     "type": "git",
@@ -56,6 +56,7 @@
     "jquery": "^3.6.0",
     "moment": "^2.29.3",
     "momentjs": "^2.0.0",
+    "perfect-scrollbar": "^1.5.5",
     "sweetalert2": "^11.4.14",
     "toastr": "^2.1.4"
   }
