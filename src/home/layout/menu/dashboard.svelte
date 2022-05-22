@@ -17,8 +17,8 @@
 
 <div class="row mt-0 d-none page page-dashboard">
     
-    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4">
-        <div class="card h-100 p-3">
+    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4 ">
+        <div class="card p-3">
             <div>
                 <label>Cari : </label>
             </div>
