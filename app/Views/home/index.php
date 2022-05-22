@@ -38,12 +38,8 @@
         }
     </script>
 </head>
-<body >
+<body id="app" class="g-sidenav-show bg-gray-100">
     
-   
-    <div id="app" class="g-sidenav-show bg-gray-100">
-
-    </div>
 
     
 </body>
