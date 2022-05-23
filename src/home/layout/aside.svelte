@@ -12,7 +12,7 @@
 
     $:if( role ){
         menus = getMenu( role );
-        console.log({ role });
+        console.log({ menus })
     }
 
     starter();
@@ -22,9 +22,13 @@
     }
 
     function getStatus(){
-        let data_user = JSON.parse(localStorage.getItem('ak-data-user'));
+        let data_user = localStorage.getItem('ak-data-user');
+        data_user = JSON.parse( data_user );
 
+        console.log({ data_user });
         role = data_user.role;
+
+        console.log({ role });
     }
 
     function changeMenu( active ){

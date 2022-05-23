@@ -82,7 +82,7 @@
                             <button class="btn btn-round btn-icon bg-gradient-warning text-white">
                                 <i class="icon fas fa-address-book"></i>
                             </button>
-                            <button class="btn btn-round btn-icon bg-gradient-info text-white">
+                            <button class="btn btn-round btn-icon bg-gradient-info text-white" data-bs-toggle="modal" data-bs-target ="modal-update-karyawan">
                                 <i class="icon fas fa-edit"></i>
                             </button>
                         </div>

@@ -29,10 +29,22 @@
 	starter();
 
 	function starter(){
-		data_user = JSON.parse( localStorage.getItem('ak-data-user') ); 
+		data_user =  localStorage.getItem('ak-data-user'); 
+		if( typeof data_user !== 'string' || ! data_user ){
+			console.log({ data_user });
+			return logout();
+		}
+		
+		data_user = JSON.parse( data_user );
 		user      = data_user.name;
-
 		role      = data_user.role;
+	}
+
+	function logout(){
+		localStorage.setItem('ak-data-user','');
+		localStorage.setItem('ak-api-key','');
+
+		window.location.href = "/";
 	}
 
 
@@ -54,8 +66,8 @@
 	<!-- End Navbar -->
 	<div class="container-fluid py-4">
 
-		<Dashboard data_user={ data_user }></Dashboard>
-
+		<Dashboard data_user={ data_user }></Dashboard> 
+		
 		{ #if role === 'ADMIN' }
 			<User ></User>
 			<Absen ></Absen>

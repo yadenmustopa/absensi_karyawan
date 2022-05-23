@@ -35,13 +35,14 @@
      */
     function setToStore( body = {} ){
         let api_key = body.api_key;
-        let data    = body.data;
-
-        let Store = new Storage();
+        let data    = JSON.stringify( body.data );
+        
+        console.log({ body: body.data , data})
+        // let Store = new Storage();
         // Store._api_key   = api_key;
         // Store._data_user = data;
         localStorage.setItem('ak-key', api_key);
-        localStorage.setItem('ak-data-user', JSON.stringify( data ) );
+        localStorage.setItem('ak-data-user',  data );
         
         dispatch( 'auth', { data : data } );
     }
