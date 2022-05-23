@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <div class="col-lg-8  col-sm-12 wrap-content p-4">
+    <div class="col-lg-8  col-sm-12 wrap-content">
             { #each users as user }
                 <div class="card p-4 border-1 mb-4 { ( ! user.address || ! user.no_hp || ! user.salary  ) ? 'bg-gradient-danger' : '' }">
                     <div class="d-flex justify-content-between">
@@ -89,7 +89,14 @@
                     </div>
                     <div class="card-body row">
                         <div class="col-lg-3 col-sm-12  wrap-image">
-                            <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                            <div class="d-flex justify-content-center">
+                                <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                                <div class="wrap-update-photo">
+                                    <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-8 col-sm-12 wrap info p-2">
                             <table>
@@ -102,6 +109,11 @@
                                     <td>No Hp</td>
                                     <td>&nbsp; : &nbsp;</td>
                                     <td>{ ( user.no_hp ) ? user.no_hp : 'belum di setting' }</td>                        
+                                </tr>
+                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                    <td>Jabatan/Bag : </td>
+                                    <td>&nbsp; : &nbsp;</td>
+                                    <td>{ ( user.position ) ? user.position : 'belum di setting' }</td>                        
                                 </tr>
                                 <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
                                     <td>Gaji</td>
