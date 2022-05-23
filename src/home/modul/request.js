@@ -26,8 +26,16 @@ class Request
             Object.assign( header, {"no-strict-version": "yes"} );
         }
 
+        if( method === "PATCH" || method === "PUT" ){
+            let axios = Rest.requestAxios( path, method, param, body, header );
+            console.log({ axios });
+            return axios;
+        }
+
         return Rest.makeRequest( path, method, param, body, header );
     }
+
+
     
     /**
      * 
@@ -86,7 +94,9 @@ class Request
      * @returns { Promise[{}] }
      */
     updateKaryawans( karyawan_id = 0 , data = {} ){
-        return this.request('/karyawans/' + karyawan_id , 'PUT', null, data, { "key" : this.api_key });
+        let req =  this.request('/karyawans/' + karyawan_id , 'PUT', null, data, { "key" : this.api_key });
+
+        return req;
     }
 
 

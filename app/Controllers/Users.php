@@ -30,7 +30,7 @@
 
         private function withIdentity( $search = ""){
             $users_model = new UsersModel();
-            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary` FROM `users` JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
+            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary` FROM `users` RIGHT JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
 
             
             if( $search ){
@@ -45,12 +45,13 @@
         private function noIdentity( $search ){
 
             $UsersModel  = new UsersModel();
-            return $UsersModel->like("name")->get()->getResultArray();
+            return $UsersModel->like("name", $search)->get()->getResultArray();
         }
 
 
         public function add()
         {
+           
             $rules       = $this->getRulesAdd();
             $validation  = $this->validation( $rules );
 
@@ -58,7 +59,6 @@
 
             $name     = $this->request->getPost("name");
             $username = $this->request->getPost("username");
-            $username = $this->request->getPost("confirmation_password");
             $password = $this->request->getPost("password");
             $role     = $this->request->getPost("role");
             $now      = Time::now('Asia/Jakarta','id')->getTimestamp();
@@ -73,9 +73,21 @@
             ];
 
             $UsersModel = new UsersModel();
-            $UsersModel->insert( $data );
-            
+            $Karyawans  = new Karyawans();
 
+            $UsersModel->db->transBegin();
+            
+                $UsersModel->insert( $data );
+                
+                $user_id = $UsersModel->getInsertID();
+                $Karyawans->addTemp( $user_id );
+            
+            $UsersModel->db->transComplete();
+
+            if( $UsersModel->db->transStatus() === false ){
+                return $this->errorOutput('gagal menyimpan');
+            }
+        
             return $this->successOutput(["successs" => true ]);
         }
 
@@ -87,12 +99,13 @@
 
             if( ! $validation["success"] ) return $this->errorOutput( $validation['message'] );
 
-            $name = $this->request->getVar('name');
-            $role = $this->request->getVar('role');
+            $name = $this->request->getJsonVar('name');
+            $role = $this->request->getJsonVar('role');
+
             $now  = Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $UsersModel = new UsersModel();
-            $UsersModel->update( $id , [ "name" => $name, "updated_at" => $now ]);
+            $UsersModel->update( $id , [ "name" => $name, "role" => $role, "updated_at" => $now ]);
 
             return $this->successOutput( [ "success" => true ] );
         }
@@ -113,6 +126,19 @@
             return $this->successOutput( [ "success" => true ] );
         }
 
+        function username_check_blank($str) {
+            $validation =  \Config\Services::validation();
+            $pattern = '/ /';
+            $result = preg_match($pattern, $str);
+
+            if ($result) {
+                // $validation->form_validation->set_message('username_check', 'The %s field can not have a " "');
+                return FALSE;
+            } else {
+                return TRUE;
+            }
+        }
+
         public function getRulesAdd()
         {
             return [
@@ -124,10 +150,11 @@
                     ]
                 ],
                 'username' => [
-                    'rules' => 'required|is_unique[users.username]',
+                    'rules' => 'required|is_unique[users.username]|alpha',
                     'errors' => [
                         "required" => "{field} tidak boleh kosong",
-                        "is_unique" => "Username Tidak Boleh Sama"
+                        "is_unique" => "Username Tidak Boleh Sama",
+                        "alpha" => "Username tidak boleh berisi spasi atau simbol"
                     ]
                 ],
                 'password' => [
@@ -146,10 +173,19 @@
                     'rules' => 'required|matches[password]',
                     'errors' => [
                         "required" => "{field} tidak boleh kosong",
-                        "matches" => "{field} tidak cocok dengan konfirmasi password",
+                        "matches" => "password dan Konfirmasi password harus sama",
                     ]
                 ],
             ];
+        }
+
+        function alpha_numeric_spaces($fullname){
+            if (! preg_match('/^[a-zA-Z\s]+$/', $fullname)) {
+                $this->form_validation->set_message('alpha_dash_space', 'The %s field may only contain alpha characters & White spaces');
+                return FALSE;
+            } else {
+                return TRUE;
+            }
         }
 
 
@@ -157,13 +193,12 @@
         {
             return [
                 'name' => [
-                    'rules' => 'required|is_unique[users.username]',
+                    'rules' => 'required',
                     'errors' => [
                         "required" => "{field} tidak boleh kosong",
-                        "is_unique" => "Username Tidak Boleh Sama"
                     ]
                 ],
-                'user_id' => [
+                'role' => [
                     'rules' => 'required',
                     'errors' => [
                         "required" => "{field} tidak boleh kosong",
@@ -208,10 +243,10 @@
             $UsersModel->db->transBegin();
 
             $UsersModel->delete( $id );
-            var_dump('tara');
+         
             $Karyawans = new Karyawans();
             $Karyawans->deleteImg( $id );
-            var_dump('cek');
+        
             $KaryawanModel = new KaryawansModel();
             $KaryawanModel->where('user_id', $id )->delete();
 

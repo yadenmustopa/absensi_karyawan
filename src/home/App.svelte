@@ -48,4 +48,3 @@
 { /if }
 
 
-<AddModal></AddModal>

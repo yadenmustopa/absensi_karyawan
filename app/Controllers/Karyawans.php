@@ -49,6 +49,19 @@
             return $this->successOutput([]);
         }
 
+
+        public function addTemp( $user_id ){
+            $now      = Time::now('Asia/Jakarta','id')->getTimestamp();
+            $KaryawansModel = new KaryawansModel();
+
+            $data = [ 
+                "user_id"    => $user_id ,
+                "created_at" => $now,
+                "updated_at" => $now
+            ];
+            $KaryawansModel->insert($data);
+        }
+
         public function update( $id )
         {
 
@@ -104,10 +117,10 @@
          */
         public function deleteImg( $user_id = 1  )
         {
-            var_dump('cek');
+            
             $path = $this->getPathPhoto( $user_id );
 
-            if( $path === 'assets/images/avatar.png') return;
+            if( $path === 'assets/images/avatar.png' || ! $path ) return;
 
             unlink( $path );
             return;
@@ -123,7 +136,11 @@
             $builder->where('user_id', $user_id );                // where clause
             $query = $builder->get()->getFirstRow();
 
-            return $query->photo;
+            if( $query ){
+                return $query->photo;
+            }else{
+                return null;
+            }
         }
 
 

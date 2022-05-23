@@ -15,6 +15,7 @@
 	let data_user;
 	let user;
 	let role;
+	let restart = false;
 
     $:if( menu_active ){
 		console.log({ menu_active });
@@ -32,9 +33,16 @@
 		user      = data_user.name;
 
 		role      = data_user.role;
-		
-		console.log({ role });
 	}
+
+
+	// function toggleRestart(){
+	// 	restart = true;
+
+	// 	setTimeout( () => {
+	// 		restart = false;
+	// 	},200);
+	// }
 
 
 </script>
@@ -49,9 +57,9 @@
 		<Dashboard data_user={ data_user }></Dashboard>
 
 		{ #if role === 'ADMIN' }
-			<User></User>
-			<Absen></Absen>
-			<Karyawan></Karyawan>
+			<User ></User>
+			<Absen ></Absen>
+			<Karyawan ></Karyawan>
 		{ /if }
 
 	</div>

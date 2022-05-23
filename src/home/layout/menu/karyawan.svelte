@@ -1,20 +1,42 @@
 <script>
     "use strict";
     import Rest from '../../modul/Request';
+    import { formatIDR } from '../../lib/handler_number';
+    import { restart }  from '../../store/toggle_restart';
 
     let search;
     let users = [];
+
+    restart.subscribe( ( start )=> {
+        console.log( { start });
+        if( start ){
+            "oke starter";
+            starter();
+        }
+    });
+
     starter();
 
     $:if( search || ! search ){
         getDataUsers();
     }
 
-    function starter(){
+    // $:if( starter ){
+    //     toggleRestart();
+    // }
+
+    function starter()
+    {
         getDataUsers();
     }
 
-    function getDataUsers(){
+    function toggleRestart()
+    {
+        starter();
+    }
+
+    function getDataUsers()
+    {
         let Request = new Rest();
         let data = {  "with_identity" : "Y" };
 
@@ -32,16 +54,15 @@
         });
     }
 </script>
-
 <div class="row mt-4 d-none page page-karyawan">
-    <div class="col-12 d-flex justify-content-end p-4">
-        <button class="btn btn-primary btn-round btn-icon text-white">
+    <!-- <div class="col-12 d-flex justify-content-end p-lg-4 p-sm-0">
+        <button class="btn btn-primary bg-gradient-info btn-round btn-icon text-white">
             <i class="icon fas fa-plus"></i>
         </button>
-    </div>
+    </div> -->
 
-    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4">
-        <div class="card h-100 p-4">
+    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4 p-0 pe-lg-4">
+        <div class="card p-4 ">
             <div>
                 <label>Cari : </label>
             </div>
@@ -52,30 +73,51 @@
         </div>
     </div>
 
-    <div class="col-lg-8 col-sm-12 wrap-content ">
-        { #each users as user }
-            <div class="card p-4">
-                <div class="card-title text-bold border-bottom p-4">
-                    { user.name }
-                </div>
-                <div class="card-body row">
-                    <div class="col-lg-4 col-sm-12  wrap-image">
-                        
-                        <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+    <div class="col-lg-8  col-sm-12 wrap-content p-4">
+            { #each users as user }
+                <div class="card p-4 border-1 mb-4 { ( ! user.address || ! user.no_hp || ! user.salary  ) ? 'bg-gradient-danger' : '' }">
+                    <div class="d-flex justify-content-between">
+                        <h3 class="">{ user.name }</h3>
+                        <div>
+                            <button class="btn btn-round btn-icon bg-gradient-warning text-white">
+                                <i class="icon fas fa-address-book"></i>
+                            </button>
+                            <button class="btn btn-round btn-icon bg-gradient-info text-white">
+                                <i class="icon fas fa-edit"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-lg-8 col-sm-12 wrap info p-2">
-                        <div>{ user.address }</div>                        
-                        <div>{ user.no_hp }</div>                        
-                        <div>{ user.salary }</div>                        
+                    <div class="card-body row">
+                        <div class="col-lg-3 col-sm-12  wrap-image">
+                            <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                        </div>
+                        <div class="col-lg-8 col-sm-12 wrap info p-2">
+                            <table>
+                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                    <td>Alamat</td>
+                                    <td>&nbsp; : &nbsp;</td>
+                                    <td>{ ( user.address ) ? user.adress : 'belum di setting' }</td>                        
+                                </tr>
+                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                    <td>No Hp</td>
+                                    <td>&nbsp; : &nbsp;</td>
+                                    <td>{ ( user.no_hp ) ? user.no_hp : 'belum di setting' }</td>                        
+                                </tr>
+                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                    <td>Gaji</td>
+                                    <td>&nbsp; : &nbsp; </td>
+                                    <td>Rp.{ formatIDR( user.salary ) }</td>                        
+                                </tr>
+                            </table>
+                        </div>
                     </div>
+                
                 </div>
-               
-            </div>
-        { :else }
-            <div class="card p-4">
-                <div class="alert alert-danger text-white"><i class="icon fas fa-warning"></i> Data tidak di temukan</div>
-            </div>
-        { /each }
+            { :else }
+                <div class="card p-4">
+                    <div class="alert alert-danger text-white m-0"><i class="icon fas fa-warning"></i> Data tidak di temukan</div>
+                </div>
+            { /each }
         
     </div>
     

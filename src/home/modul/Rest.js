@@ -1,6 +1,7 @@
 import {Rest} from "@keyos/api-sdk";
 import Swal from 'sweetalert2'
 import preloader from '../lib/preloader';
+import axios from 'axios';
 
 class KeyOSApi {
 
@@ -51,8 +52,52 @@ class KeyOSApi {
                 icon: 'error',
                 title: 'Eroor',
                 text: body.message
-              })
+            })
         })
+    }
+
+            /**
+     * 
+     * @param  path { string }
+     * @param  method { 'GET'|'POST'|'PUT'|'PATCH'|'DELETE' }
+     * @param  param { Object}
+     * @param  body { Object }
+     * @param  header { Object }
+     * @returns 
+     */
+    requestAxios( path = "/", method="POST" , param = null, body = null, header = null ){
+        return new Promise( ( resolve, reject ) =>{
+
+            axios({
+                method: method,
+                url: window.config.base_url + path,
+                data:body,
+                headers : header
+            }).then( ( res ) => {
+                let data  = res.data;
+                let success = data.success;
+
+                console.log({ data });
+                if( success ){
+                    resolve( data );
+                }else{
+                    reject( data );
+                }
+
+            }).catch( ( err ) => {
+                // let body = err.getBody();
+            
+                preloader.hide();
+    
+                //open Sweet alert when errord detected
+    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eroor',
+                    text: body.message
+                })
+            })
+        } )
     }
 }
 
