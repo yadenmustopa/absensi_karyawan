@@ -51,6 +51,14 @@ $routes->delete('/users/(:num)', 'Users::delete/$1');
 $routes->get('/absens', 'Absens::index');
 $routes->post('/absens', 'Absens::add');
 $routes->put('/absens/(:num)', 'Absens::update/$1');
+
+
+$routes->get('/jabatans', 'Jabatan::index');
+$routes->post('/jabatans', 'Jabatans::add');
+$routes->put('/Jabatans/(:num)', 'Jabatans::update/$1');
+$routes->delete('/Jabatans/(:num)', 'Jabatans::delete/$1');
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

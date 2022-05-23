@@ -9,10 +9,12 @@ class Jabatans extends Migration
     private string $table ="jabatans";
     public function up()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `$this->table` (
+        $sql = "CREATE TABLE IF NOT EXISTS `$this->table`  (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
             `name` VARCHAR(15) NULL DEFAULT '',
             `description` LONGTEXT NULL DEFAULT '',
+            `created_at` INT(11) NULL DEFAULT NULL,
+            `updated_at` INT(11) NULL DEFAULT NULL,
             PRIMARY KEY (`id`),
             INDEX `name` (`name`)
         )";

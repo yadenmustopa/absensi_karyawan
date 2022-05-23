@@ -37,6 +37,8 @@ CREATE TABLE IF NOT EXISTS `jabatans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(15) DEFAULT '',
   `description` longtext DEFAULT '',
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
