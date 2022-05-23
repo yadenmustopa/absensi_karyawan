@@ -32,12 +32,25 @@ CREATE TABLE IF NOT EXISTS `absens` (
 /*!40000 ALTER TABLE `absens` DISABLE KEYS */;
 /*!40000 ALTER TABLE `absens` ENABLE KEYS */;
 
+-- Dumping structure for table absensi_karyawan.jabatans
+CREATE TABLE IF NOT EXISTS `jabatans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(15) DEFAULT '',
+  `description` longtext DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table absensi_karyawan.jabatans: ~0 rows (approximately)
+/*!40000 ALTER TABLE `jabatans` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jabatans` ENABLE KEYS */;
+
 -- Dumping structure for table absensi_karyawan.karyawans
 CREATE TABLE IF NOT EXISTS `karyawans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `address` varchar(50) DEFAULT '',
-  `position` enum('CEO','CTO','CFO','CMO','COO','WPP') NOT NULL DEFAULT 'CEO',
+  `position` varchar(50) NOT NULL DEFAULT 'CEO',
   `created_at` int(11) DEFAULT NULL,
   `updated_at` int(11) DEFAULT NULL,
   `no_hp` varchar(50) DEFAULT '',
@@ -91,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `status` (`role`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
--- Dumping data for table absensi_karyawan.users: ~5 rows (approximately)
+-- Dumping data for table absensi_karyawan.users: ~4 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `updated_at`, `created_at`, `username`, `password`, `role`) VALUES
 	(1, 'ADMIN', 1653141331, 1653141331, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'ADMIN'),
