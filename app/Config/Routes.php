@@ -53,10 +53,10 @@ $routes->post('/absens', 'Absens::add');
 $routes->put('/absens/(:num)', 'Absens::update/$1');
 
 
-$routes->get('/jabatans', 'Jabatan::index');
+$routes->get('/jabatans', 'Jabatans::index');
 $routes->post('/jabatans', 'Jabatans::add');
-$routes->put('/Jabatans/(:num)', 'Jabatans::update/$1');
-$routes->delete('/Jabatans/(:num)', 'Jabatans::delete/$1');
+$routes->put('/jabatans/(:num)', 'Jabatans::update/$1');
+$routes->delete('/jabatans/(:num)', 'Jabatans::delete/$1');
 
 
 /*

@@ -126,18 +126,18 @@
             return $this->successOutput( [ "success" => true ] );
         }
 
-        function username_check_blank($str) {
-            $validation =  \Config\Services::validation();
-            $pattern = '/ /';
-            $result = preg_match($pattern, $str);
+        // function username_check_blank($str) {
+        //     $validation =  \Config\Services::validation();
+        //     $pattern = '/ /';
+        //     $result = preg_match($pattern, $str);
 
-            if ($result) {
-                // $validation->form_validation->set_message('username_check', 'The %s field can not have a " "');
-                return FALSE;
-            } else {
-                return TRUE;
-            }
-        }
+        //     if ($result) {
+        //         // $validation->form_validation->set_message('username_check', 'The %s field can not have a " "');
+        //         return FALSE;
+        //     } else {
+        //         return TRUE;
+        //     }
+        // }
 
         public function getRulesAdd()
         {

@@ -14,7 +14,7 @@ class JabatansModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name','created_at','updated_at'];
+    protected $allowedFields    = ['name','description','created_at','updated_at'];
 
     // Dates
     protected $useTimestamps = true;
