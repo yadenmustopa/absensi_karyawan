@@ -58,13 +58,13 @@
                         <form role="form text-left">
                             <label>Nama:</label>
                             <div class="input-group mb-3">
-                                <input type="nama" class="form-control" placeholder="Nama" aria-label="Nama" bind:value = { name }
+                                <input type="text" class="form-control" placeholder="Nama" aria-label="Nama" bind:value = { name }
                                     aria-describedby="email-addon">
                             </div>
                             
                             <label>Username:</label>
                             <div class="input-group mb-3">
-                                <input type="username" class="form-control" placeholder="Username" bind:value = { username }
+                                <input type="text" class="form-control" placeholder="Username" bind:value = { username }
                                     aria-label="username" >
                             </div>
 
