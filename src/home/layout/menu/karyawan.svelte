@@ -100,8 +100,8 @@
                         </div>
                     </div>
                     <div class="card-body row">
-                        <div class="col-lg-3 col-sm-12 col-md-12  wrap-image">
-                            <div class="d-flex justify-content-center">
+                        <div class="col-lg-3 col-sm-12 col-md-4  wrap-image">
+                            <div class="d-flex justify-content-lg-end justify-content-sm-center justify-content-md-end">
                                 <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
                                 <div class="wrap-update-photo">
                                     <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white">
@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-8 col-sm-12 col-md-12 wrap info p-2">
+                        <div class="col-lg-8 col-sm-12 col-md-8 wrap info p-2 f-flex justify-content-lg-start justify-content-center justify-content-sm-center justify-content-md-start">
                             <table>
                                 <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
                                     <td>Alamat</td>

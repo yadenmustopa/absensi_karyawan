@@ -19,7 +19,7 @@
 
             $base        = $this->getSyntax( $search, $start_date, $end_date, $has_absen);
             $users_model = new UsersModel();
-        
+            
             $sql      = $users_model->db->query( $base );
             $response = $sql->getResult('array');
             $data     = [ "data" => $response ];
@@ -29,20 +29,26 @@
 
         private function getSyntax( $search, $start_date, $end_date , $has_absen = "Y" )
         {
-            
-            $base = "SELECT `absens`.`id` AS `absen_id`, `users`.`name` AS `name`,`karyawans`.`position` AS `position`,`absens`.`created_at` AS `created_at`,`absens`.`status` AS `status`,`absens`.`description` AS `description` FROM `users` CROSS JOIN `absens` ON `absens`.`user_id` = `users`.`id` CROSS JOIN `karyawans` ON `users`.`id`=`karyawans`.`user_id` ";
-
-            if( $search ){
-                $base.= " WHERE `users`.`name` LIKE '%$search%' AND (`absens`.`created_at` BETWEEN $start_date AND $end_date )  ";
-            }else{
-                $base.= " WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date";
-            }
-
+            $base = "";
             if( $has_absen === 'N'){
-                // $base.= " AND NOT EXISTS ( SELECT `absens`.`user_id` FROM `users` WHERE `users`.`id` = `absens`.`user_id`  )";
-                // $base= "SELECT * FROM `users` CROSS JOIN `absens` ON `users`.`id` = `absens`.`user_id`  WHERE NOT EXISTS ( SELECT `users`.`id` FROM `users` WHERE `users`.`id` = `absens`.`user_id` )";
-                $base = "SELECT * FROM `users` CROSS JOIN `karyawans` ON `users`.`id` = `karyawans`.`id`  WHERE `users`.`id` NOT IN ( SELECT `user_id` FROM `absens` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date )";
+                if( $search ){
+                    $base = "SELECT * FROM `users` CROSS JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id`  WHERE `users`.`id` NOT IN ( SELECT `user_id` FROM `absens` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date ) AND `users`.`name` LIKE '%$search%' OR `karyawans`.`address` LIKE '%$search%'";
+                    // $base = "SELECT * FROM `users`  JOIN `karyawans` ON `users`.`id` = `karyawans`.`id` WHERE NOT EXISTS  ( SELECT `absens`.`user_id` FROM `absens` WHERE `users`.`id` = `absens`.`user_id` AND (`absens`.`created_at` BETWEEN $start_date AND $end_date ) )";
+                    // $base = "SELECT * FROM `users`  JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id` ";
+                }else{
+                    $base = "SELECT * FROM `users` CROSS JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id`  WHERE `users`.`id` NOT IN ( SELECT `user_id` FROM `absens` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date )";
+                    // $base = "SELECT * FROM `users`  JOIN `karyawans` ON `users`.`id` = `karyawans`.`id` WHERE NOT EXISTS  ( SELECT `absens`.`user_id` FROM `absens` WHERE `users`.`id` = `absens`.`user_id` AND `absens`.`created_at` BETWEEN $start_date AND $end_date  )";
+                }
+
+            }else{
+                $base = "SELECT `absens`.`id` AS `absen_id`, `users`.`name` AS `name`,`karyawans`.`position` AS `position`,`absens`.`created_at` AS `created_at`,`absens`.`status` AS `status`,`absens`.`description` AS `description` FROM `users` CROSS JOIN `absens` ON `absens`.`user_id` = `users`.`id` CROSS JOIN `karyawans` ON `users`.`id`=`karyawans`.`user_id` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date";
+
+                if( $search ){
+                    $base .=" AND `users`.`name` LIKE '%$search%' ";
+                }
             }
+
+
 
             return $base;
         }
