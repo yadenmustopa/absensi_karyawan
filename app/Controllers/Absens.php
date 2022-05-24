@@ -11,12 +11,13 @@
         public function index()
         {
             $search        = $this->request->getGet('search') ;
-            $hasAbsen      = $this->request->getGet('has_absen') ;
+            $has_absen      = $this->request->getGet('has_absen') ;
             $start_date    = $this->request->getGet('start_date') ?? strtotime( date('m-01-Y 00:00:00' ) );
             $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $search = trim( $search );
 
+            $base        = $this->getSyntax( $search, $start_date, $end_date, $has_absen);
             $users_model = new UsersModel();
         
             $sql      = $users_model->db->query( $base );
@@ -26,12 +27,17 @@
             return $this->successOutput( $data, 200 ) ;
         }
 
-        public function getSyntax( $search, $start_date, $end_date , $hasAbsen = "Y" )
+        private function getSyntax( $search, $start_date, $end_date , $has_absen = "Y" )
         {
+            
             $base = "SELECT `users`.`name` AS `name`,`absens`.`created_at` AS `created_at`,`absens`.`status` AS `status`,`absens`.`description` AS `description` FROM `users` CROSS JOIN `absens` ON `absens`.`user_id` = `users`.`id`";
-            $base.= " WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date";
+            if( $search ){
+                $base.= " WHERE `users`.`name` LIKE '%$search%' AND (`absens`.`created_at` BETWEEN $start_date AND $end_date )  ";
+            }else{
+                $base.= " WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date   ";
+            }
 
-            if( $hasAbsen === 'N'){
+            if( $has_absen === 'N'){
                 $base.= " AND NOT EXISTS ( SELECT `absens`.`user_id` FROM `users` WHERE `users`.`id` = `absens`.`user_id`  )";
             }
 
