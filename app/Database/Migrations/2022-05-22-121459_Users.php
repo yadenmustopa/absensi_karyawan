@@ -6,6 +6,9 @@ use CodeIgniter\Database\Migration;
 
 class Users extends Migration
 {
+
+    private string $table = 'users';
+    
     public function up()
     {
         $sql = "CREATE TABLE IF NOT EXISTS `$this->table` (
