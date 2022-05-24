@@ -14,6 +14,9 @@ function switchPage( to = "dashboard" ){
         console.log({ restart });
         restart.set( true );
     },200);
+
+    jquery("main .ps__rail-y").animate({ scrollTop: 0 }, "slow");
+    jquery("main .ps__rail-y").css("top","0")
 }
 
 export default switchPage;

@@ -11,7 +11,7 @@
         public function index()
         {
             $search        = $this->request->getGet('search') ;
-            $has_absen      = $this->request->getGet('has_absen') ;
+            $has_absen     = $this->request->getGet('has_absen') ;
             $start_date    = $this->request->getGet('start_date') ?? strtotime( date('m-01-Y 00:00:00' ) );
             $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
 
@@ -45,6 +45,19 @@
             }
 
             return $base;
+        }
+
+        public function getById( $user_id ){
+            $search        = $this->request->getGet('search') ;
+            // $has_absen     = $this->request->getGet('has_absen') ;
+            $start_date    = $this->request->getGet('start_date') ?? strtotime( date('m-01-Y 00:00:00' ) );
+            $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
+
+            $AbsenModel    = new AbsensModel();
+            $sql = $AbsenModel -> where('user_id', $user_id )->get();
+
+            var_dump( $sql );
+            
         }
 
         public function add()

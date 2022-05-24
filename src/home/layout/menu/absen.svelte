@@ -6,6 +6,7 @@
     import ModalUpdate from '../modal/update_absen.svelte';
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
+    import { restart }  from '../../store/toggle_restart';
     // import { createEventDispatcher } from 'svelte';
 
     // const dispatch     = createEventDispatcher();
@@ -15,7 +16,15 @@
     let users_no_absened = [];
     let data_selected_has_absen;
     let data_selected_no_absen;
-
+    
+    
+    restart.subscribe( ( start )=> {
+        console.log( { start });
+        if( start ){
+            "oke starter";
+            starter();
+        }
+    });
 
     starter();
 
@@ -125,8 +134,8 @@
         <div class="card mb-4">
                 <h3 class="mt-4 ms-4">:: Belum Absen ::</h3>
                 <div class="d-flex justify-content-end pe-4">
-                    <button class="btn btn-danger">
-                        <i class="icon fas fa-plus"></i>Ke tanpa Keterangan Semua
+                    <button class="btn btn-danger text-white">
+                        <i class="icon fas fa-plus"></i> Semua Absen Tanpa Keterangan
                     </button>
                 </div>
 
@@ -141,6 +150,7 @@
                                     align="center">Nama</th>
                                 <th class="text-uppercase  text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2"
                                     align="center">Jabatan/Bag</th>
+                             
 
                                 <th></th>
                             </tr>
@@ -151,8 +161,7 @@
                                     <td align="left" width ="10%">{ i + 1 }</td>
                                     <td align="left">{ user.name }</td>
                                     <td align="center">{ user.position }</td>
-                                    <td align="left">{ user.status }</td>
-                                    <td align="center">{ user.Description }</td>
+                                 
                                     <td align="right">
                                         <button 
                                             type   = "button" 
@@ -194,7 +203,10 @@
                                     align="center">Nama</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                                     align="center">Jabatan/Bag</th>
-    
+                                <th class="text-uppercase  text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2"
+                                    align="center">Status</th>
+                                <th class="text-uppercase  text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2"
+                                    align="center">Description</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -204,6 +216,8 @@
                                     <td align="left" width ="10%">{ i + 1 }</td>
                                     <td align="left">{ user.name }</td>
                                     <td align="center">{ user.position }</td>
+                                    <td align="left">{ user.status }</td>
+                                    <td align="center">{ (user.description) ? user.description : '...' }</td>
                                     <td align="right">
                                         <button 
                                             type  = "button" 

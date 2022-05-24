@@ -27,7 +27,7 @@ use Exception;
                     
                     
                     $check = $this->checkApiKey( $api_key );
-                    if( ! $check ) return $ApiController->errorOutput('key tidak berlaku', 401 );
+                    if( ! $check ) return $ApiController->errorOutput('key tidak berlaku' );
                     
                 }catch( Exception $err ){
                     $ApiController->errorOutput('Anda Tidak Di ijinkan mengakses tanpa token', 401 );

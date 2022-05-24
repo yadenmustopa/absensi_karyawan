@@ -48,6 +48,7 @@ $routes->put('/users/(:num)', 'Users::update/$1');
 $routes->patch('/change_pwd', 'Users::updatePwd');
 $routes->delete('/users/(:num)', 'Users::delete/$1');
 
+$routes->get('/absens/(:num)', 'Absens::getById/$1');
 $routes->get('/absens', 'Absens::index');
 $routes->post('/absens', 'Absens::add');
 $routes->put('/absens/(:num)', 'Absens::update/$1');
