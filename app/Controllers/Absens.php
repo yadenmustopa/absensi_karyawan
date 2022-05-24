@@ -11,29 +11,32 @@
         public function index()
         {
             $search        = $this->request->getGet('search') ;
+            $hasAbsen      = $this->request->getGet('has_absen') ;
             $start_date    = $this->request->getGet('start_date') ?? strtotime( date('m-01-Y 00:00:00' ) );
             $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
 
-            $$search = trim( $search );
+            $search = trim( $search );
 
             $users_model = new UsersModel();
-            $base = "SELECT `users`.`name` AS `name`,`absens`.`created_at` AS `created_at`,`absens`.`status` AS `status`,`absens`.`description` AS `description` FROM `users` JOIN `absens` ON `absens`.`user_id` = `users`.`id`";
-
-            $base.= " WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date";
-            if( $search ){
-                $base .= " AND `users`.`name` LIKE '%$search%' OR  `absens`.`status` LIKE '% $search%'  ";
-            }
-
-            var_dump($base);
-            
-            $sql = $users_model->db->query( $base );
-
+        
+            $sql      = $users_model->db->query( $base );
             $response = $sql->getResult('array');
+            $data     = [ "data" => $response ];
 
-            $data = ["data" => $response ];
             return $this->successOutput( $data, 200 ) ;
         }
 
+        public function getSyntax( $search, $start_date, $end_date , $hasAbsen = "Y" )
+        {
+            $base = "SELECT `users`.`name` AS `name`,`absens`.`created_at` AS `created_at`,`absens`.`status` AS `status`,`absens`.`description` AS `description` FROM `users` CROSS JOIN `absens` ON `absens`.`user_id` = `users`.`id`";
+            $base.= " WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date";
+
+            if( $hasAbsen === 'N'){
+                $base.= " AND NOT EXISTS ( SELECT `absens`.`user_id` FROM `users` WHERE `users`.`id` = `absens`.`user_id`  )";
+            }
+
+            return $base;
+        }
 
         public function add()
         {
@@ -53,6 +56,7 @@
                 "status"      => $status,
                 "description" => $description,
                 "created_at"  => $now,
+                "updated_at"  => $now,
             ];
 
             $AbsenModel = new AbsensModel();

@@ -4,6 +4,7 @@
     import { convertToDate } from '../../lib/handle-moment';
     import ModalAdd from '../modal/add_user';
     import ModalUpdate from '../modal/update_user.svelte';
+    import ModalUpdatePwd from '../modal/update_password.svelte';
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
     // import { createEventDispatcher } from 'svelte';
@@ -13,10 +14,12 @@
     let search;
     let users = [];
     let data_selected;
+    let role_access;
 
     starter();
 
     $:if( search || ! search ){
+        console.log( { search });
         getDataUsers();
     }
 
@@ -26,6 +29,7 @@
 
     function starter(){
         getDataUsers();
+        getRoleAccess();
     }
 
 
@@ -53,11 +57,30 @@
      * 
      * @param { Object } data
      * @param { String } data.name
+     * @param { String } data.user_id
      * @param { String } data.role
      * 
      */
     function changeDataSelected( data ){
         data_selected = data 
+    }
+
+    /**
+     * 
+     * @param { Object } data
+     * @param { String } data.role_access
+     * @param { String } data.user_id
+     * 
+     */
+    function changeDataSelectedPwd( data ){
+        data_selected = data 
+    }
+
+    function getRoleAccess(){
+        let data_user = localStorage.getItem('ak-data-user');
+        data_user     = JSON.parse( data_user );
+
+        role_access   = data_user.role;
     }
 
     /**
@@ -93,7 +116,7 @@
         </button>
     </div>
 
-    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4">
+    <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4">
         <div class="card p-4">
             <div>
                 <label>Cari : </label>
@@ -105,7 +128,7 @@
         </div>
     </div>
 
-    <div class="col-lg-8 col-sm-12 wrap-content ">
+    <div class="col-lg-8 col-sm-12 col-md-12 wrap-content ">
         <div class="card mb-4">
             <h2 class="mt-4 ms-4">Daftar User</h2>
 
@@ -117,7 +140,7 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                                     align="center" width ="10%">No</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                                    align="center">Name</th>
+                                    align="center">Nama</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                                     align="center">Role</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
@@ -135,6 +158,9 @@
                                 <td align="right">
                                     <button class="btn btn-warning btn-icon btn-round me-2" on:click={ () => { changeDataSelected( { name : user.name, role : user.role, user_id : user.id }) } } data-bs-target="#modal-update-user" data-bs-toggle="modal">
                                         <i class="icon fas fa-edit text-white"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-icon btn-round me-2" on:click={ () => { changeDataSelectedPwd( { role_access : role_access ,user_id : user.id, name : user.name }) } } data-bs-target="#modal-update-pwd-user" data-bs-toggle="modal">
+                                        <i class="icon fas fa-key text-white"></i>
                                     </button>
                                     <button class="btn btn-danger btn-icon btn-round" on:click={ ()=>{ deleteUser( user.id, user.name ) } } >
                                         <i class="icon fas fa-trash text-white"></i>
@@ -159,5 +185,6 @@
 </div>
 
 
-<ModalAdd on:success={ ()=> { starter } }></ModalAdd>
+<ModalAdd on:success={  starter }></ModalAdd>
 <ModalUpdate data_selected = { data_selected } on:success={ starter }></ModalUpdate>
+<ModalUpdatePwd data_selected = { data_selected } on:success={ starter }></ModalUpdatePwd>

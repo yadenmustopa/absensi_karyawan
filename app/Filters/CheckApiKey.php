@@ -20,13 +20,18 @@ use Exception;
                 
             }else{
                 $ApiController   = new ApiController();
-                $api_key  = $_SERVER['HTTP_KEY'];
-                if( !$api_key || ! $_SERVER['HTTP_KEY'] ) return $ApiController->errorOutput("tidak di ijinkan mengakses", 401 );
                 
-                
-                $check = $this->checkApiKey( $api_key );
-                if( ! $check ) return $ApiController->errorOutput('key tidak berlaku', 401 );
-                
+                try{
+                    $api_key  = $_SERVER['HTTP_KEY'];
+                    if( !$api_key || ! $_SERVER['HTTP_KEY'] ) return $ApiController->errorOutput("tidak di ijinkan mengakses", 401 );
+                    
+                    
+                    $check = $this->checkApiKey( $api_key );
+                    if( ! $check ) return $ApiController->errorOutput('key tidak berlaku', 401 );
+                    
+                }catch( Exception $err ){
+                    $ApiController->errorOutput('Anda Tidak Di ijinkan mengakses tanpa token', 401 );
+                }
             }
 
         }

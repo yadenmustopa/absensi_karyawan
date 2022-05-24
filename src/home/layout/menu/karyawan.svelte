@@ -3,9 +3,11 @@
     import Rest from '../../modul/Request';
     import { formatIDR } from '../../lib/handler_number';
     import { restart }  from '../../store/toggle_restart';
+    import ModalUpdate from '../modal/update_karyawan.svelte';
 
     let search;
     let users = [];
+    let data_selected;
 
     restart.subscribe( ( start )=> {
         console.log( { start });
@@ -53,6 +55,12 @@
             console.log({ users });
         });
     }
+
+
+    function changeDataSelected( data )
+    {
+        data_selected = data;
+    }
 </script>
 <div class="row mt-4 d-none page page-karyawan">
     <!-- <div class="col-12 d-flex justify-content-end p-lg-4 p-sm-0">
@@ -73,22 +81,26 @@
         </div>
     </div>
 
-    <div class="col-lg-8  col-sm-12 wrap-content">
+    <div class="col-lg-8  col-sm-12  col-md-12 wrap-content">
             { #each users as user }
-                <div class="card p-4 border-1 mb-4 { ( ! user.address || ! user.no_hp || ! user.salary  ) ? 'bg-gradient-danger' : '' }">
+                <div class="card p-4 border-1 mb-4 { ( !user.address || !user.no_hp || !user.salary || ! user.position  ) ? 'bg-gradient-danger' : '' }">
                     <div class="d-flex justify-content-between">
                         <h3 class="">{ user.name }</h3>
                         <div>
                             <button class="btn btn-round btn-icon bg-gradient-warning text-white">
                                 <i class="icon fas fa-address-book"></i>
                             </button>
-                            <button class="btn btn-round btn-icon bg-gradient-info text-white" data-bs-toggle="modal" data-bs-target ="modal-update-karyawan">
+                            <button 
+                                class            ="btn btn-round btn-icon bg-gradient-info text-white" 
+                                data-bs-toggle   ="modal" data-bs-target ="#modal-update-karyawan" 
+                                on:click         = { () => changeDataSelected( { address: user.address, position : user.position, no_hp : user.no_hp, salary : user.salary, karyawan_id : user.karyawan_id, name : user.name  }) } >
+
                                 <i class="icon fas fa-edit"></i>
                             </button>
                         </div>
                     </div>
                     <div class="card-body row">
-                        <div class="col-lg-3 col-sm-12  wrap-image">
+                        <div class="col-lg-3 col-sm-12 col-md-12  wrap-image">
                             <div class="d-flex justify-content-center">
                                 <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
                                 <div class="wrap-update-photo">
@@ -98,24 +110,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-8 col-sm-12 wrap info p-2">
+                        <div class="col-lg-8 col-sm-12 col-md-12 wrap info p-2">
                             <table>
-                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
                                     <td>Alamat</td>
                                     <td>&nbsp; : &nbsp;</td>
-                                    <td>{ ( user.address ) ? user.adress : 'belum di setting' }</td>                        
+                                    <td>{ ( user.address ) ? user.address : 'belum di setting' }</td>                        
                                 </tr>
-                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
                                     <td>No Hp</td>
                                     <td>&nbsp; : &nbsp;</td>
                                     <td>{ ( user.no_hp ) ? user.no_hp : 'belum di setting' }</td>                        
                                 </tr>
-                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
                                     <td>Jabatan/Bag : </td>
                                     <td>&nbsp; : &nbsp;</td>
                                     <td>{ ( user.position ) ? user.position : 'belum di setting' }</td>                        
                                 </tr>
-                                <tr class={ ( user.address && user.no_hp && user.salary  ) ? '' : 'text-white' }>
+                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
                                     <td>Gaji</td>
                                     <td>&nbsp; : &nbsp; </td>
                                     <td>Rp.{ formatIDR( user.salary ) }</td>                        
@@ -134,3 +146,5 @@
     </div>
     
 </div>
+
+<ModalUpdate data_selected = { data_selected } on:success = { starter }></ModalUpdate>

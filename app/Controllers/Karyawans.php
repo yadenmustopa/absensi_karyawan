@@ -76,12 +76,14 @@
             $address         = $this->request->getVar('address');
             $position        = $this->request->getVar('position');
             $salary          = $this->request->getVar('salary');
+            $no_hp          = $this->request->getVar('no_hp');
             $now             = Time::now('Asia/Jakarta','id')->getTimestamp();
          
             $data = [
                 "address"    => $address,
                 "position"   => $position,
                 "salary"     => $salary,
+                "no_hp"      => $no_hp,
                 "updated_at" => $now,
             ];
 

@@ -129,6 +129,7 @@ class Request
      * @param { Object } data 
      * @param { Number } data.user_id 
      * @param { String } data.password 
+     * @param { String } data.role_access 
      * @param { String } data.old_password 
      * @returns { Promise[{}] }
      */
@@ -192,10 +193,55 @@ class Request
      * @param { String } data.description
      * @returns 
      */
-    updateAbsens( $absen_id = 0, data = {} ){
-        return this.request('/absens/' + $absen_id, "PUT", null , data, { "key" : this.api_key });
+    updateAbsens( absen_id = 0, data = {} ){
+        return this.request('/absens/' + absen_id, "PUT", null , data, { "key" : this.api_key });
     }
 
+
+    /**
+     * 
+     * @param { Object } data 
+     * @param { String } data.search
+     * @returns 
+     */
+    getJabatans( data ){
+        return this.request('/jabatans', "GET", data, null, { key : this.api_key });
+    }
+
+
+    /**
+     * 
+     * @param { Object } data 
+     * @param { String } data.name 
+     * @param { String } data.description 
+     * @returns 
+     */
+    addJabatans( data ){
+        return this.request('/jabatans', 'POST', null, data , { key : this.api_key });
+    }
+
+
+    /**
+     * 
+     * @param { Number } jabatan_id 
+     * @param { Object } data 
+     * @param { String } data.name 
+     * @param { String } data.description 
+     * @returns 
+     */
+    updateJabatans( jabatan_id, data ){
+        return this.request('/jabatans/'+ jabatan_id , "PUT", null , data, { key : this.api_key });
+    }
+
+
+    /**
+     * 
+     * @param { Number } jabatan_id 
+     * @returns 
+     */
+    deleteJabatans( jabatan_id ){
+        return this.request('/jabatans/' + jabatan_id, "DELETE" , null, { key : this.api_key });
+    }
 }
 
 

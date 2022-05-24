@@ -12,7 +12,7 @@ class AbsensModel extends Model
     protected $updatedField = "updated_at";
     protected $returnType   = "array";
 
-    protected $allowedFields = ['created_at','status','description','user_id'];
+    protected $allowedFields = ['created_at','updated_at','status','description','user_id'];
 
     protected $validationRules   = [];
     protected $validationMessage = [];

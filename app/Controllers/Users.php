@@ -30,7 +30,7 @@
 
         private function withIdentity( $search = ""){
             $users_model = new UsersModel();
-            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary` FROM `users` RIGHT JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
+            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary`, `karyawans`.`id` AS `karyawan_id`, `users`.`id` AS `user_id` FROM `users` RIGHT JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
 
             
             if( $search ){
@@ -45,7 +45,11 @@
         private function noIdentity( $search ){
 
             $UsersModel  = new UsersModel();
-            return $UsersModel->like("name", $search)->get()->getResultArray();
+            if( $search ){
+                return $UsersModel->like("name", $search)->get()->getResultArray();
+            }else{
+                return $UsersModel->get()->getResultArray();
+            }
         }
 
 
@@ -113,15 +117,18 @@
 
         public function updatePwd(){
             $id              = $this->request->getVar('user_id');
+            $role_access     = $this->request->getVar('role_access');
             $password        = $this->request->getVar('password');
             $old_password    = $this->request->getVar('old_password');
 
-            $cek = $this->checkPwd( $id, $old_password );
-
-            if( ! $cek ) return $this->errorOutput('password Sebelumnya Salah');
+            if( $role_access === "KARYAWAN"){
+                $cek = $this->checkPwd( $id, $old_password );
+    
+                if( ! $cek ) return $this->errorOutput('password Sebelumnya Salah');
+            }
 
             $UsersModel = new UsersModel();
-            $UsersModel->update( $id , [ "password" => $password ]);
+            $UsersModel->update( $id , [ "password" => sha1( $password ) ]);
 
             return $this->successOutput( [ "success" => true ] );
         }
