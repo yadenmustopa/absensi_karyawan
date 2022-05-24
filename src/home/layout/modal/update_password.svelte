@@ -21,20 +21,22 @@
     }
 
     function starter(){
-        getJabatans();
+        // getJabatans();
     }
 
-    function getJabatans(){
-        let Rest     = new Request();
-        let request  = Rest.getJabatans();
+    // function getJabatans(){
+    //     let Rest     = new Request();
+    //     let request  = Rest.getJabatans();
 
-        request.then( ( res ) => {
-            let body  = res.getBody();
-            jabatans = body.data;
+    //     request.then( ( res ) => {
+    //         let body  = res.getBody();
 
-            console.log({ jabatans });
-        })
-    }
+    //         console.log({ body })
+    //         jabatans = body.data;
+
+            
+    //     })
+    // }
 
     function assignToData( data ){
         console.log( { data } );

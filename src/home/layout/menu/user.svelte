@@ -168,9 +168,9 @@
                                 </td>
                             </tr>
                             { :else }
-                            <div class="card">
+                            <td colspan=4>
                                 <div class="alert alert-danger text-white m-0">Data Tidak Di temukan</div>
-                            </div>
+                            </td>
                             {/each}
 
                         </tbody>

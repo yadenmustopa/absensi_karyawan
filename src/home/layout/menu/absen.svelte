@@ -2,9 +2,8 @@
     "use strict";
     import Rest from '../../modul/Request';
     import { convertToDate } from '../../lib/handle-moment';
-    import ModalAdd from '../modal/add_user';
-    import ModalUpdate from '../modal/update_user.svelte';
-    import ModalUpdatePwd from '../modal/update_password.svelte';
+    import ModalAdd from '../modal/add_absen.svelte';
+    import ModalUpdate from '../modal/update_absen.svelte';
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
     // import { createEventDispatcher } from 'svelte';
@@ -12,15 +11,18 @@
     // const dispatch     = createEventDispatcher();
 
     let search;
-    let users = [];
-    let data_selected;
-    let role_access;
+    let users_has_absened = [];
+    let users_no_absened = [];
+    let data_selected_has_absen;
+    let data_selected_no_absen;
+
 
     starter();
 
     $:if( search || ! search ){
         console.log( { search });
-        getDataUsers();
+        getUserHasAbsened();
+        getUserNoAbsened();
     }
 
     // $:if( restart ){
@@ -28,30 +30,62 @@
     // }
 
     function starter(){
-        getDataUsers();
-        getRoleAccess();
+        console.log("absen starter");
+        getUserHasAbsened();
+        getUserNoAbsened();
+        // getRoleAccess();
     }
 
 
-    // function toggleRestart(){
-    //     starter();
-    // }
+    function getUserHasAbsened(){
+        getAbsen("Y");
+    }
 
-    function getDataUsers(){
+
+    function getUserNoAbsened()
+    {
+        getAbsen("N");
+    }
+
+
+    /**
+     * 
+     * @param { "Y"|"N"} has_absen
+     */
+    function getAbsen( has_absen = "Y" )
+    {
         let Request = new Rest();
-        let data = {};
+        let data = { "has_absen" : has_absen };
 
         if( search ){
             data = { "search" : search }
         }
 
-        let request = Request.getUsers( data );
+        let request = Request.getAbsense( data );
 
         request.then( ( res )=>{
             let body = res.getBody();
-            users    = body.data;
+
+            if( has_absen === "Y" ){
+                users_has_absened = body.data;
+                console.log({ users_has_absened })
+            }else{
+                users_no_absened = body.data;
+            }
         });
     }
+
+    /**
+     * 
+     * @param absen_id
+     * @param name
+     * @param status
+     * @param description
+     */
+    function changeSelectedHasAbsen( absen_id="", name="", status="", description="" ){
+        data_selected_has_absen = { absen_id, name, status, description } 
+    }
+
 
     /**
      * 
@@ -61,49 +95,12 @@
      * @param { String } data.role
      * 
      */
-    function changeDataSelected( data ){
-        data_selected = data 
+    function changeSelectedNoAbsen( data ){
+        console.log({ data });
+        data_selected_no_absen = data 
     }
 
-    /**
-     * 
-     * @param { Object } data
-     * @param { String } data.role_access
-     * @param { String } data.user_id
-     * 
-     */
-    function changeDataSelectedPwd( data ){
-        data_selected = data 
-    }
 
-    function getRoleAccess(){
-        let data_user = localStorage.getItem('ak-data-user');
-        data_user     = JSON.parse( data_user );
-
-        role_access   = data_user.role;
-    }
-
-    /**
-     * 
-     * @param { Number } id
-     * @param { Name }name
-     */
-    function deleteUser( id = 0, name = "" ){
-        let oke_delete = confirm("Yakin Mau Hapus Akun ", "Hapus");
-
-        oke_delete.then(( res )=>{
-            preloader.show();
-
-            let Request = new Rest();
-            let request = Request.deleteUsers( id );
-
-            request.then( () => { 
-                preloader.hide();
-                alertToast("Berhasil", "data berhasil di hapus", "success" , "top-end", 3000 );
-                starter();
-            })
-        });
-    }
 
 
 </script>
@@ -126,8 +123,66 @@
 
     <div class="col-lg-8 col-sm-12 col-md-12 wrap-content ">
         <div class="card mb-4">
-            <h2 class="mt-4 ms-4">Daftar Karyawan Belum Absen</h2>
+                <h3 class="mt-4 ms-4">:: Belum Absen ::</h3>
+                <div class="d-flex justify-content-end pe-4">
+                    <button class="btn btn-danger">
+                        <i class="icon fas fa-plus"></i>Ke tanpa Keterangan Semua
+                    </button>
+                </div>
 
+            <div class="card-body row">
+                <div class="table-responsive">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"
+                                    align="center" width ="10%">No</th>
+                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                                    align="center">Nama</th>
+                                <th class="text-uppercase  text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2"
+                                    align="center">Jabatan/Bag</th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { #each users_no_absened as user, i }
+                                <tr>
+                                    <td align="left" width ="10%">{ i + 1 }</td>
+                                    <td align="left">{ user.name }</td>
+                                    <td align="center">{ user.position }</td>
+                                    <td align="left">{ user.status }</td>
+                                    <td align="center">{ user.Description }</td>
+                                    <td align="right">
+                                        <button 
+                                            type   = "button" 
+                                            class  = "btn  btn-icon bg-gradient-info" 
+                                            data-bs-target = "#modal-add-absen" 
+                                            data-bs-toggle ="modal" 
+                                            on:click       = { ()=> { changeSelectedNoAbsen({ user_id : user.user_id, name : user.name }) } }    
+                                        >
+                                            <i class="fas fa-plus">Masukan Ke Absen</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            { :else }
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="alert alert-danger text-white m-0">Data Tidak Di temukan</div>
+                                    </td>
+                                </tr>
+                            {/each}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="card mb-4">
+            <h3 class="mt-4 ms-4">:: Sudah Di Absen ::</h3>
+    
             <div class="card-body row">
                 <div class="table-responsive">
                     <table class="table align-items-center mb-0">
@@ -139,33 +194,44 @@
                                     align="center">Nama</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                                     align="center">Jabatan/Bag</th>
+    
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            { #each users as user, i }
-                            <tr>
-                                <td align="left" width ="10%">{ i + 1 }</td>
-                                <td align="left">{ user.name }</td>
-                                <td align="center">{ user.position }</td>
-                            </tr>
+                            { #each users_has_absened as user, i }
+                                <tr>
+                                    <td align="left" width ="10%">{ i + 1 }</td>
+                                    <td align="left">{ user.name }</td>
+                                    <td align="center">{ user.position }</td>
+                                    <td align="right">
+                                        <button 
+                                            type  = "button" 
+                                            class = "btn btn-icon bg-gradient-warning" 
+                                            data-bs-target = "#modal-update-absen" 
+                                            data-bs-toggle="modal" 
+                                            on:click       = { ()=> { changeSelectedHasAbsen( user.absen_id, user.name, user.status, user.description ) } }     
+                                        >
+                                            <i class="fas fa-edit">Ubah data Absen</i>
+                                        </button>
+                                    </td>
+                                </tr>
                             { :else }
-                            <div class="card">
-                                <div class="alert alert-danger text-white m-0">Data Tidak Di temukan</div>
-                            </div>
+                                <td colspan="4">
+                                    <div class="alert alert-danger text-white m-0">Data Tidak Di temukan</div>
+                                </td>
                             {/each}
-
+    
                         </tbody>
                     </table>
                 </div>
             </div>
-
+    
         </div>
-
     </div>
     
 </div>
 
 
-<ModalAdd on:success={  starter }></ModalAdd>
-<ModalUpdate data_selected = { data_selected } on:success={ starter }></ModalUpdate>
-<ModalUpdatePwd data_selected = { data_selected } on:success={ starter }></ModalUpdatePwd>
+<ModalAdd on:success={ starter } data_selected = { data_selected_no_absen }></ModalAdd>
+<ModalUpdate on:success={ starter } data_selected = { data_selected_has_absen } ></ModalUpdate>
