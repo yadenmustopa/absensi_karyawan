@@ -141,6 +141,8 @@
                                     align="center" width ="10%">No</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                                     align="center">Nama</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                                    align="center">Username</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                                     align="center">Role</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
@@ -153,6 +155,7 @@
                             <tr>
                                 <td align="left" width ="10%">{ i + 1 }</td>
                                 <td align="left">{ user.name }</td>
+                                <td align="left">{ user.username }</td>
                                 <td align="center">{ user.role}</td>
                                 <td align="center">{ convertToDate(user.created_at, "DD MMM YYYY") }</td>
                                 <td align="right">
