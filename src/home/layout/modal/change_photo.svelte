@@ -4,6 +4,9 @@
     import Request from '../../modul/request';  
     import preloader from '../../lib/preloader';
     import { alertToast } from '../../lib/alert';
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
     
     let karyawan_id;
     let name;
@@ -42,6 +45,8 @@
         request.then( ( res )=>{
             preloader.hide();
             alertToast( 'Berhasil', 'Photo Berhasil diubah', "success" );
+
+            dispatch('success', true );
         }).catch( ( err ) => {
             result_photo = null;
         })
@@ -140,7 +145,7 @@
 
             <div class="modal-body p-0">
                 <div class="row wrap-photo-preview">
-                    <div class="card">
+                    <div class="card p-4">
                         <div class="img-wrap d-flex justify-content-center">
                             { #if ( result_photo ) }
                                 <img src = { result_photo } id="photo-karyawan-preview" class="mb-3">

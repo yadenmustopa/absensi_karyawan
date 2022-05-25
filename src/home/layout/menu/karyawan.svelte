@@ -127,7 +127,9 @@
                 <div class="card-body row">
                     <div class="col-lg-3 col-sm-12 col-md-4  wrap-image">
                         <div class="d-flex justify-content-lg-end justify-content-sm-center justify-content-md-end">
-                            <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                            <div class="list-wrap-image">
+                                <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                            </div>
                             
                             <div class="wrap-update-photo">
                                 <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white" data-bs-toggle="modal" data-bs-target="#modal-change-photo" on:click={ changeSelectedPhoto( user.karyawan_id,user.name, user.photo  ) }>
@@ -175,4 +177,4 @@
 
 <ModalUpdate data_selected = { data_selected } on:success = { starter }></ModalUpdate>
 <ModalHistory data_selected = { data_selected }></ModalHistory>
-<ModalChangePhoto data_selected_photo = { data_selected_photo }></ModalChangePhoto>
+<ModalChangePhoto data_selected_photo = { data_selected_photo } on:success = { starter }></ModalChangePhoto>

@@ -13,6 +13,7 @@
     const dispatch = createEventDispatcher();
 
     $:if( data_selected ){
+        console.log({ data_selected });
         assignToData( data_selected );
     }
 

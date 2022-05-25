@@ -130,6 +130,6 @@ nb-configuration.xml
 /phpunit*.xml
 /.phpunit.*.cache
 .history
-public/upload/*
+public/uploads/*
 public/dist/*
 .routify
