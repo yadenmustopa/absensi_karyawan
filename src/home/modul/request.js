@@ -168,10 +168,20 @@ class Request
      * @param { string } data.end_date
      * @returns 
      */
-    getAbsense( data = {} ){
+    getAbsens( data = {} ){
         return this.request( '/absens', "GET", data , null, { "key" : this.api_key } );
     }
 
+    /**
+     * 
+     * @param { Number } user_id  
+     * @param { Object } data.start_date 
+     * @param { Object } data.end_date
+     * @returns 
+     */
+    getAbsenById( user_id, data  ){
+        return this.request('/absens/' + user_id, "GET", data, null, { key : this.api_key });
+    }
 
     /**
      * 

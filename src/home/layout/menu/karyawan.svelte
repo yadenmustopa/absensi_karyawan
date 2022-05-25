@@ -4,6 +4,7 @@
     import { formatIDR } from '../../lib/handler_number';
     import { restart }  from '../../store/toggle_restart';
     import ModalUpdate from '../modal/update_karyawan.svelte';
+    import ModalHistory from '../modal/history_absensi.svelte';
 
     let search;
     let users = [];
@@ -82,69 +83,76 @@
     </div>
 
     <div class="col-lg-8  col-sm-12  col-md-12 wrap-content">
-            { #each users as user }
-                <div class="card p-4 border-1 mb-4 { ( !user.address || !user.no_hp || !user.salary || ! user.position  ) ? 'bg-gradient-danger' : '' }">
-                    <div class="d-flex justify-content-between">
-                        <h3 class="">{ user.name }</h3>
-                        <div>
-                            <button class="btn btn-round btn-icon bg-gradient-warning text-white">
-                                <i class="icon fas fa-address-book"></i>
-                            </button>
-                            <button 
-                                class            ="btn btn-round btn-icon bg-gradient-info text-white" 
-                                data-bs-toggle   ="modal" data-bs-target ="#modal-update-karyawan" 
-                                on:click         = { () => changeDataSelected( { address: user.address, position : user.position, no_hp : user.no_hp, salary : user.salary, karyawan_id : user.karyawan_id, name : user.name  }) } >
-
-                                <i class="icon fas fa-edit"></i>
-                            </button>
-                        </div>
+        { #each users as user }
+            <div class="card p-4 border-1 mb-4 { ( !user.address || !user.no_hp || !user.salary || ! user.position  ) ? 'bg-gradient-danger' : '' }">
+                <div class="d-flex justify-content-between">
+                    <h3 class="">{ user.name }</h3>
+                    <div>
+                        <button 
+                            class            = "btn btn-round btn-icon bg-gradient-warning text-white"
+                            data-bs-toggle   = "modal" 
+                            data-bs-target   = "#modal-history-absen" 
+                            on:click         = { () => changeDataSelected( { address: user.address, position : user.position, no_hp : user.no_hp, salary : user.salary, karyawan_id : user.karyawan_id, name : user.name, user_id : user.user_id  }) } 
+                        >
+                            <i class="icon fas fa-address-book"></i>
+                        </button>
+                        <button 
+                            class            = "btn btn-round btn-icon bg-gradient-info text-white" 
+                            data-bs-toggle   = "modal" 
+                            data-bs-target   = "#modal-update-karyawan" 
+                            on:click         = { () => changeDataSelected( { address: user.address, position : user.position, no_hp : user.no_hp, salary : user.salary, karyawan_id : user.karyawan_id, name : user.name, user_id : user.user_id  }) } 
+                        >
+                            <i class="icon fas fa-edit"></i>
+                        </button>
                     </div>
-                    <div class="card-body row">
-                        <div class="col-lg-3 col-sm-12 col-md-4  wrap-image">
-                            <div class="d-flex justify-content-lg-end justify-content-sm-center justify-content-md-end">
-                                <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
-                                <div class="wrap-update-photo">
-                                    <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </div>
+                </div>
+                <div class="card-body row">
+                    <div class="col-lg-3 col-sm-12 col-md-4  wrap-image">
+                        <div class="d-flex justify-content-lg-end justify-content-sm-center justify-content-md-end">
+                            <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                            <div class="wrap-update-photo">
+                                <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white">
+                                    <i class="fas fa-edit"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="col-lg-8 col-sm-12 col-md-8 wrap info p-2 f-flex justify-content-lg-start justify-content-center justify-content-sm-center justify-content-md-start">
-                            <table>
-                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
-                                    <td>Alamat</td>
-                                    <td>&nbsp; : &nbsp;</td>
-                                    <td>{ ( user.address ) ? user.address : 'belum di setting' }</td>                        
-                                </tr>
-                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
-                                    <td>No Hp</td>
-                                    <td>&nbsp; : &nbsp;</td>
-                                    <td>{ ( user.no_hp ) ? user.no_hp : 'belum di setting' }</td>                        
-                                </tr>
-                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
-                                    <td>Jabatan/Bag : </td>
-                                    <td>&nbsp; : &nbsp;</td>
-                                    <td>{ ( user.position ) ? user.position : 'belum di setting' }</td>                        
-                                </tr>
-                                <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
-                                    <td>Gaji</td>
-                                    <td>&nbsp; : &nbsp; </td>
-                                    <td>Rp.{ formatIDR( user.salary ) }</td>                        
-                                </tr>
-                            </table>
-                        </div>
                     </div>
-                
+                    <div class="col-lg-8 col-sm-12 col-md-8 wrap info p-2 f-flex justify-content-lg-start justify-content-center justify-content-sm-center justify-content-md-start">
+                        <table>
+                            <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
+                                <td>Alamat</td>
+                                <td>&nbsp; : &nbsp;</td>
+                                <td>{ ( user.address ) ? user.address : 'belum di setting' }</td>                        
+                            </tr>
+                            <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
+                                <td>No Hp</td>
+                                <td>&nbsp; : &nbsp;</td>
+                                <td>{ ( user.no_hp ) ? user.no_hp : 'belum di setting' }</td>                        
+                            </tr>
+                            <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
+                                <td>Jabatan/Bag : </td>
+                                <td>&nbsp; : &nbsp;</td>
+                                <td>{ ( user.position ) ? user.position : 'belum di setting' }</td>                        
+                            </tr>
+                            <tr class={ ( user.address && user.no_hp && user.salary && user.position  ) ? '' : 'text-white' }>
+                                <td>Gaji</td>
+                                <td>&nbsp; : &nbsp; </td>
+                                <td>Rp.{ formatIDR( user.salary ) }</td>                        
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-            { :else }
-                <div class="card p-4">
-                    <div class="alert alert-danger text-white m-0"><i class="icon fas fa-warning"></i> Data tidak di temukan</div>
-                </div>
-            { /each }
+            
+            </div>
+        { :else }
+            <div class="card p-4">
+                <div class="alert alert-danger text-white m-0"><i class="icon fas fa-warning"></i> Data tidak di temukan</div>
+            </div>
+        { /each }
         
     </div>
     
 </div>
 
 <ModalUpdate data_selected = { data_selected } on:success = { starter }></ModalUpdate>
+<ModalHistory data_selected = { data_selected }></ModalHistory>

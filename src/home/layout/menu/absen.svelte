@@ -70,7 +70,7 @@
             data = { "search" : search }
         }
 
-        let request = Request.getAbsense( data );
+        let request = Request.getAbsens( data );
 
         request.then( ( res )=>{
             let body = res.getBody();
