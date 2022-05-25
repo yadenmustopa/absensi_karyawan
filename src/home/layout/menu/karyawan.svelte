@@ -5,10 +5,12 @@
     import { restart }  from '../../store/toggle_restart';
     import ModalUpdate from '../modal/update_karyawan.svelte';
     import ModalHistory from '../modal/history_absensi.svelte';
+    import ModalChangePhoto  from '../modal/change_photo.svelte';
 
     let search;
     let users = [];
     let data_selected;
+    let data_selected_photo;
 
     restart.subscribe( ( start )=> {
         console.log( { start });
@@ -57,11 +59,27 @@
         });
     }
 
-
+    /**
+     * 
+     * @param { Object } data
+     */
     function changeDataSelected( data )
     {
         data_selected = data;
     }
+
+    /**
+     * 
+     * @param { Number } karyawan_id
+     * @param { String } name
+     * @param { String }path
+     */
+    function changeSelectedPhoto( karyawan_id = 0, name = "", path = "" )
+    {
+        data_selected_photo = { karyawan_id, path, name  }
+    }
+
+
 </script>
 <div class="row mt-4 d-none page page-karyawan">
     <!-- <div class="col-12 d-flex justify-content-end p-lg-4 p-sm-0">
@@ -112,7 +130,7 @@
                             <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
                             
                             <div class="wrap-update-photo">
-                                <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white">
+                                <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white" data-bs-toggle="modal" data-bs-target="#modal-change-photo" on:click={ changeSelectedPhoto( user.karyawan_id,user.name, user.photo  ) }>
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </div>
@@ -157,4 +175,4 @@
 
 <ModalUpdate data_selected = { data_selected } on:success = { starter }></ModalUpdate>
 <ModalHistory data_selected = { data_selected }></ModalHistory>
-<ModalChangePhoto data_selected = { data_selected }></ModalChangePhoto>
+<ModalChangePhoto data_selected_photo = { data_selected_photo }></ModalChangePhoto>

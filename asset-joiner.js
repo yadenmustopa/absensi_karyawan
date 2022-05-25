@@ -37,6 +37,7 @@ const config = {
                 files : [
                     "./public/assets/soft-ui/css/nucleo-icons.css",
                     "./public/assets/soft-ui/css/nucleo-svg.css",
+                    "./public/assets/vendors/croppie/croppie.css",
                     "./public/assets/soft-ui/css/soft-ui-dashboard.css"
                 ],
                 output : "./public/dist/soft-ui.css",
@@ -68,6 +69,8 @@ const config = {
                 files : [
                     "./public/assets/soft-ui/js/core/popper.min.js",
                     "./public/assets/soft-ui/js/core/bootstrap.min.js",
+                    "./public/assets/vendors/croppie/croppie.min.js",
+                    "./public/assets/vendors/jquery/jquery.min.js",
                     "./public/assets/soft-ui/js/plugins/perfect-scrollbar.min.js",
                     "./public/assets/soft-ui/js/plugins/smooth-scrollbar.min.js",
                     "./public/assets/soft-ui/js/plugins/chartjs.min.js",

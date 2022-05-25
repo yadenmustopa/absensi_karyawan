@@ -67,7 +67,7 @@ class Request
      * @returns { Promise[{}] }
      */
     uploadPhotoKaryawan( karyawan_id = 0, data = { } ){
-        return this.request('/karyawans/' + karyawan_id, "POST", null, data = {} , { "key" : this.api_key, "content-type":"multipart/form-data" }  )
+        return this.request('/karyawans/' + karyawan_id, "POST", null, data , { "key" : this.api_key }  )
     }
 
     /**
