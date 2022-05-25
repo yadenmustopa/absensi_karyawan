@@ -60,9 +60,14 @@
             $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $AbsenModel    = new AbsensModel();
-            $sql = $AbsenModel -> where('user_id', $user_id )->get();
+            $sql = $AbsenModel -> where('user_id', $user_id )
+                               -> where('created_at>=', $start_date )
+                               -> where('created_at<=', $end_date )
+                               -> get()->getResultArray();
 
-            var_dump( $sql );
+            $data = [ "data" => $sql ];
+
+            return $this->successOutput( $data );
             
         }
 

@@ -105,6 +105,10 @@
         });
     }
 
+    function getBGByRole( role = "ADMIN" ){
+        return ( role === 'ADMIN' ) ? 'bg-gradient-info' : 'bg-gradient-warning'; 
+    }
+
 
 </script>
 
@@ -156,7 +160,7 @@
                                 <td align="left" width ="10%">{ i + 1 }</td>
                                 <td align="left">{ user.name }</td>
                                 <td align="left">{ user.username }</td>
-                                <td align="center">{ user.role}</td>
+                                <td align="center" class="text-white { getBGByRole( user.role ) }">{ user.role}</td>
                                 <td align="center">{ convertToDate(user.created_at, "DD MMM YYYY") }</td>
                                 <td align="right">
                                     <button class="btn btn-warning btn-icon btn-round me-2" on:click={ () => { changeDataSelected( { name : user.name, role : user.role, user_id : user.id }) } } data-bs-target="#modal-update-user" data-bs-toggle="modal">
