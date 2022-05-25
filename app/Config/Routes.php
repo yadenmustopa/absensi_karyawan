@@ -50,6 +50,7 @@ $routes->delete('/users/(:num)', 'Users::delete/$1');
 
 $routes->get('/absens/(:num)', 'Absens::getById/$1');
 $routes->get('/absens', 'Absens::index');
+$routes->post('/absens/multiple', 'Absens::multiAdd');
 $routes->post('/absens', 'Absens::add');
 $routes->put('/absens/(:num)', 'Absens::update/$1');
 

@@ -95,21 +95,38 @@
         }
 
 
-        public function upload( $id ){
+        public function upload( $karyawan_id ){
 
-            $rules = $this->getRulesUpload();
-            $valid = $this->validation( $rules );
+            // $rules = $this->getRulesUpload();
+            // $valid = $this->validation( $rules );
            
-            if( ! $valid['success'] ) return $this->errorOutput( $valid['message' ]);
+            // if( ! $valid['success'] ) return $this->errorOutput( $valid['message' ]);
+            // $form = json_decode($this->request->getBody());
+            // var_dump( $form );
+            $img = $this->request->getPost('photo');
+            
+            $img = str_replace('data:image/webp;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            // var_dump( $data );
+            $uniq_id = uniqid();
+            
+            $file = FCPATH.'/uploads/' . $uniq_id . '.webp';
 
-            $img = $this->request->getFile('photo');
-            $name = $img->getRandomName();
-            $img->move('upload',$name);
-            $data = [ "photo" => 'upload/'.$name ];
+            $success = file_put_contents($file, $data);
+    
+            if( !$success ){
+                return $this->errorOutput('gagal mengupload');
+            }
+            // var_dump( $photo );
+            // var_dump( $test_request );
+            // $img = $this->request->getFile('photo');
+            // $name = $img->getRandomName();
+            // $img->move('upload',$name);
+            // $data = [ "photo" => 'upload/'.$name ];
 
             $karyawans_model = new KaryawansModel();
-            $karyawans_model->update( $id, $data );
-
+            $karyawans_model->update( $karyawan_id, ["photo" => 'uploads/'.$uniq_id.'.webp'] );
 
             return $this->successOutput(["success" => true]);
         }
@@ -149,15 +166,15 @@
         private function getRulesUpload()
         {
             return [
-                'photo' => [
-                    'rules' => 'uploaded[photo]|max_size[photo,2024]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                        "uploaded" => "Photo tidak boleh kosong",
-                        "max_size" => "ukuran photo tidak boleh lebih dari 2mb",
-                        "is_image" => "pastikan yang di upload adalah file gambar",
-                        "mime_in"  => "masukan file jpg/jpeg/png"
-                    ]
-                ]
+                // 'photo' => [
+                //     'rules' => 'uploaded[photo]|max_size[photo,2024]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
+                //     'errors' => [
+                //         "uploaded" => "Photo tidak boleh kosong",
+                //         "max_size" => "ukuran photo tidak boleh lebih dari 2mb",
+                //         "is_image" => "pastikan yang di upload adalah file gambar",
+                //         "mime_in"  => "masukan file jpg/jpeg/png"
+                //     ]
+                // ]
             ];
         }
 

@@ -5,6 +5,7 @@
     use App\Models\UsersModel;
     use App\Models\AbsensModel;
     use CodeIgniter\I18n\Time;
+use PhpParser\Node\Stmt\Foreach_;
 
     class Absens extends ApiController
     {
@@ -96,6 +97,42 @@
             $AbsenModel->insert( $data );
 
             return $this->successOutput([]);
+        }
+
+        public function multiAdd(){
+            $data = $this->request->getPost('data');
+
+            var_dump( $data );
+
+            if( ! $data ){
+                $this->errorOutput("Data Tidak Boleh Kosong");
+            }
+            
+            // $data = str_replace('{','[',$data);
+            // $data = str_replace('}',']',$data);
+            $b=[[
+                "user"=> 1
+            ],
+                "user"=> 2
+        ];
+                
+            
+            $c = json_encode( $b ) ;
+            // var_dump( $c );
+            $a = json_decode( $data );
+            // var_dump( $a );
+
+            foreach ($a as $key => $value) {
+                $created_at = ["created_at" => $this->now()];
+                $a->$key[] = $created_at;
+            }
+
+            var_dump($a);
+
+        }
+
+        private function now(){
+            return Time::now('Asia/Jakarta','id')->getTimestamp();
         }
 
         public function update( $absen_id )
