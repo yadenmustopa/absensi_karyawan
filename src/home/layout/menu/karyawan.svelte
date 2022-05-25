@@ -110,6 +110,7 @@
                     <div class="col-lg-3 col-sm-12 col-md-4  wrap-image">
                         <div class="d-flex justify-content-lg-end justify-content-sm-center justify-content-md-end">
                             <img src={ window.config.base_url + '/' + user.photo } alt={ "photo-" + user.name }>
+                            
                             <div class="wrap-update-photo">
                                 <button type="button" class="btn btn-round btn-icon bg-gradient-dark text-white">
                                     <i class="fas fa-edit"></i>
@@ -156,3 +157,4 @@
 
 <ModalUpdate data_selected = { data_selected } on:success = { starter }></ModalUpdate>
 <ModalHistory data_selected = { data_selected }></ModalHistory>
+<ModalChangePhoto data_selected = { data_selected }></ModalChangePhoto>

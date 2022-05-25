@@ -135,7 +135,7 @@
                 <h3 class="mt-4 ms-4">:: Belum Absen ::</h3>
                 <div class="d-flex justify-content-end pe-4">
                     <button class="btn btn-danger text-white">
-                        <i class="icon fas fa-plus"></i> Semua Absen Tanpa Keterangan
+                        <i class="icon fas fa-plus text-white"></i> Semua Absen Tanpa Keterangan
                     </button>
                 </div>
 
