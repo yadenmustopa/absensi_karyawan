@@ -123,9 +123,9 @@
     align-items: flex-start;
 }
 
-.input-group>.form-control{
-    padding-left : 8px !important;
-}
+// .input-group>.form-control{
+//     padding-left : 8px !important;
+// }
 
 .wrap-update-photo{
     margin-left: -20px;
@@ -164,4 +164,8 @@
 .list-wrap-image img{
     width: 120px !important;
     height:120px !important;
+}
+
+table tbody tr:nth-child(even){
+    background: #dddddd;
 }

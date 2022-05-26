@@ -6,6 +6,7 @@
     // import jquery from 'jquery';
     import DateRangeSelect from 'svelte-date-range-select';
     import { getToday, convertToDate, stringDateToFormat } from '../../lib/handle-moment';
+    import getColorBgStatus from '../../lib/bg_status_absen';
 
     export let data_selected;
 
@@ -20,7 +21,7 @@
     const endDateId = 'end_date_id' 
 
     const name_datepicker    = 'crated_date';
-    const heading_datepicker = 'Jarank Tanggal :' 
+    const heading_datepicker = 'Jarak Tanggal :' 
         // this limits the HTML5 date picker end date - e.g. today is used here 
     const endDateMax = new Date();
 
@@ -56,14 +57,14 @@
     let user_id  = '';
     let position = '';
 
-    default_range_date();
+    defaultRangeDate();
 
 
     function starter(){
         getHistoryById();
     }
 
-    function default_range_date(){
+    function defaultRangeDate(){
         start_date = getToday('YYYY-MM-DD');
         end_date   = getToday('YYYY-MM-DD');
     }
@@ -103,22 +104,6 @@
         //  endDate: 2020-04-06,
         //  name: createdDate
         // }
-    }
-
-    /**
-     * 
-     * @param status
-     */
-    function getColorBgStatus( status = "MASUK"){
-        if( status === 'MASUK' ){
-            return 'bg-gradient-info text-white';   
-        }else if( status === 'IZIN' ){
-            return 'bg-gradient-warning text-white'   
-        }else if( status === 'CUTI'){
-            return 'bg-gradient-primary text-white'
-        }else{
-            return 'bg-gradient-danger text-white'
-        }
     }
 
     function assignToData()

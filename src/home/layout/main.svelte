@@ -6,6 +6,7 @@
 	import User 	 from './menu/user.svelte';
 	import Absen 	 from './menu/absen.svelte';
 	import Karyawan 	 from './menu/karyawan.svelte';
+	import Jabatan 	 from './menu/jabatan.svelte';
 	import redirect  from '../lib/redirect-page';
 
 	const dispatch = createEventDispatcher();
@@ -72,6 +73,7 @@
 			<User ></User>
 			<Absen ></Absen>
 			<Karyawan ></Karyawan>
+			<Jabatan></Jabatan>
 		{ /if }
 
 	</div>

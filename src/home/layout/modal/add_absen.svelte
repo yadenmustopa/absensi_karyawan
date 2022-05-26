@@ -56,7 +56,8 @@
 </script>
 
 
-<div class="modal fade" id="modal-add-absen" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+<div class="modal fade" id="modal-add-absen" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
 
@@ -69,11 +70,11 @@
                         <form role="form text-left">
                             <label>Nama :</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" aria-label="Nama" bind:value={ name }  disabled>
+                                <input type="text" class="form-control" aria-label="Nama" bind:value={ name } disabled>
                             </div>
 
                             <label>Status Absen:</label>
-                            <select class="form-select" aria-label="Default select example" bind:value= { status }>
+                            <select class="form-select" aria-label="Default select example" bind:value={ status }>
                                 <option value="MASUK">MASUK</option>
                                 <option value="TANPA_KETERANGAN">TANPA KETERANGAN</option>
                                 <option value="CUTI">CUTI</option>
@@ -83,7 +84,8 @@
 
                             <label>Ketrangan :</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Keterangan" aria-label="Nama" bind:value = { description } >
+                                <textarea type="text" class="form-control" placeholder="Keterangan" aria-label="Nama"
+                                    bind:value={ description }></textarea>
                             </div>
 
                             <div class="text-center">

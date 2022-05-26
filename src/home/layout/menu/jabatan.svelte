@@ -2,9 +2,8 @@
     "use strict";
     import Rest from '../../modul/Request';
     import { convertToDate } from '../../lib/handle-moment';
-    import ModalAdd from '../modal/add_user';
-    import ModalUpdate from '../modal/update_user.svelte';
-    import ModalUpdatePwd from '../modal/update_password.svelte';
+    // import ModalAdd from '../modal/add_jabatan';
+    // import ModalUpdate from '../modal/update_jabatan.svelte';
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
     // import { createEventDispatcher } from 'svelte';
@@ -12,15 +11,13 @@
     // const dispatch     = createEventDispatcher();
 
     let search;
-    let users = [];
+    let jabatans = [];
     let data_selected;
-    let role_access;
 
     starter();
 
     $:if( search || ! search ){
-        console.log( { search });
-        getDataUsers();
+        getDatajabatans();
     }
 
     // $:if( restart ){
@@ -28,8 +25,7 @@
     // }
 
     function starter(){
-        getDataUsers();
-        getRoleAccess();
+        getDatajabatans();
     }
 
 
@@ -37,7 +33,7 @@
     //     starter();
     // }
 
-    function getDataUsers(){
+    function getDatajabatans(){
         let Request = new Rest();
         let data = {};
 
@@ -45,11 +41,11 @@
             data = { "search" : search }
         }
 
-        let request = Request.getUsers( data );
+        let request = Request.getJabatans( data );
 
         request.then( ( res )=>{
             let body = res.getBody();
-            users    = body.data;
+            jabatans    = body.data;
         });
     }
 
@@ -57,7 +53,7 @@
      * 
      * @param { Object } data
      * @param { String } data.name
-     * @param { String } data.user_id
+     * @param { String } data.jabatan_id
      * @param { String } data.role
      * 
      */
@@ -67,35 +63,17 @@
 
     /**
      * 
-     * @param { Object } data
-     * @param { String } data.role_access
-     * @param { String } data.user_id
-     * 
-     */
-    function changeDataSelectedPwd( data ){
-        data_selected = data 
-    }
-
-    function getRoleAccess(){
-        let data_user = localStorage.getItem('ak-data-user');
-        data_user     = JSON.parse( data_user );
-
-        role_access   = data_user.role;
-    }
-
-    /**
-     * 
      * @param { Number } id
      * @param { Name }name
      */
-    function deleteUser( id = 0, name = "" ){
+    function deletejabatan( id = 0, name = "" ){
         let oke_delete = confirm("Yakin Mau Hapus Akun ", "Hapus");
 
         oke_delete.then(( res )=>{
             preloader.show();
 
             let Request = new Rest();
-            let request = Request.deleteUsers( id );
+            let request = Request.deleteJabatans( id );
 
             request.then( () => { 
                 preloader.hide();
@@ -105,17 +83,13 @@
         });
     }
 
-    function getBGByRole( role = "ADMIN" ){
-        return ( role === 'ADMIN' ) ? 'bg-gradient-info' : 'bg-gradient-warning'; 
-    }
-
 
 </script>
 
-<div class="row mt-4 d-none page page-user">
+<div class="row mt-4 d-none page page-jabatan">
     <div class="col-12 d-flex justify-content-end p-4 pt-0 pb-2">
         <button class="btn bg-gradient-info btn-round btn-icon text-white" data-bs-toggle="modal"
-        data-bs-target="#modal-add-user">
+        data-bs-target="#modal-add-jabatan">
             <i class="icon fas fa-plus"></i>
         </button>
     </div>
@@ -127,14 +101,14 @@
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-                <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama / alamat..." aria-label="search" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama Jabatan/Bagian..." aria-label="search" aria-describedby="basic-addon1">
               </div>
         </div>
     </div>
 
     <div class="col-lg-8 col-sm-12 col-md-12 wrap-content ">
         <div class="card mb-4">
-            <h2 class="mt-4 ms-4">Daftar User</h2>
+            <h2 class="mt-4 ms-4">Daftar Jabatan / Bagian </h2>
 
             <div class="card-body row">
                 <div class="table-responsive">
@@ -146,33 +120,29 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                                     align="center">Nama</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                                    align="center">Username</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                                    align="center">Role</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                                    align="center">Di buat</th>
-                                <th class="text-secondary opacity-7"></th>
+                                    align="center">description</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                                    align="center"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            { #each users as user, i }
+                            { #each jabatans as jabatan, i }
                             <tr>
                                 <td align="left" width ="10%">{ i + 1 }</td>
-                                <td align="left">{ user.name }</td>
-                                <td align="left">{ user.username }</td>
-                                <td align="center" class="text-white { getBGByRole( user.role ) }">{ user.role}</td>
-                                <td align="center">{ convertToDate(user.created_at, "DD MMM YYYY") }</td>
+                                <td align="center">{ jabatan.name }</td>
+                                <td align="left">{ jabatan.description }</td>
                                 <td align="right">
-                                    <button class="btn btn-danger btn-icon btn-round me-2" on:click={ ()=>{ deleteUser( user.id, user.name ) } } >
+                                    <button class="btn btn-danger btn-icon btn-round me-2" on:click={ ()=>{ deletejabatan( jabatan.id, jabatan.name ) } } >
                                         <i class="icon fas fa-trash text-white"></i>
                                     </button>
-                                    <button class="btn btn-primary btn-icon btn-round me-2" on:click={ () => { changeDataSelectedPwd( { role_access : role_access ,user_id : user.id, name : user.name }) } } data-bs-target="#modal-update-pwd-user" data-bs-toggle="modal">
-                                        <i class="icon fas fa-key text-white"></i>
-                                    </button>
-                                    <button class="btn btn-warning btn-icon btn-round " on:click={ () => { changeDataSelected( { name : user.name, role : user.role, user_id : user.id }) } } data-bs-target="#modal-update-user" data-bs-toggle="modal">
+                                    <button class="btn btn-warning btn-icon btn-round me-2" on:click={ () => { changeDataSelected( { name : jabatan.name, id : jabatan.id, description:jabatan.description  }) } } data-bs-target="#modal-update-jabatan" data-bs-toggle="modal">
                                         <i class="icon fas fa-edit text-white"></i>
                                     </button>
+                                    <button class="btn btn-info btn-icon btn-round " on:click={ () => { changeDataSelected( { name : jabatan.name, id : jabatan.id, description:jabatan.description  }) } } data-bs-target="#modal-update-jabatan" data-bs-toggle="modal">
+                                        <i class="icon fas fa-plus text-white"></i>
+                                    </button>
                                 </td>
+                               
                             </tr>
                             { :else }
                             <td colspan=4>
@@ -191,7 +161,7 @@
     
 </div>
 
-
+<!-- 
 <ModalAdd on:success={  starter }></ModalAdd>
 <ModalUpdate data_selected = { data_selected } on:success={ starter }></ModalUpdate>
-<ModalUpdatePwd data_selected = { data_selected } on:success={ starter }></ModalUpdatePwd>
+<ModalUpdatePwd data_selected = { data_selected } on:success={ starter }></ModalUpdatePwd> -->

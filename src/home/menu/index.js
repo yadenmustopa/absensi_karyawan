@@ -18,6 +18,11 @@ const admin = [
         icon : 'fas fa-check',
         name : 'ABSENSI',
         href : 'absen'
+    },
+    {
+        icon : 'fas fa-list',
+        name : 'JABATAN',
+        href : 'jabatan'
     }
 ];
 

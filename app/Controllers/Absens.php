@@ -5,7 +5,7 @@
     use App\Models\UsersModel;
     use App\Models\AbsensModel;
     use CodeIgniter\I18n\Time;
-use PhpParser\Node\Stmt\Foreach_;
+    use stdClass;
 
     class Absens extends ApiController
     {
@@ -100,34 +100,31 @@ use PhpParser\Node\Stmt\Foreach_;
         }
 
         public function multiAdd(){
-            $data = $this->request->getPost('data');
-
+            $data = $this->request->getPost('absens');
             var_dump( $data );
 
-            if( ! $data ){
-                $this->errorOutput("Data Tidak Boleh Kosong");
+            if( ! $data )return $this->errorOutput("Data Tidak Boleh Kosong");
+    
+            
+            $datas = json_decode( $data );
+
+            if( ! $datas ) return $this->errorOutput("Data Tidak Boleh Kosong");
+
+            foreach ( $datas as $key => $value ) {
+                $datas[ $key ] = new stdClass();
+                $datas[ $key ]->created_at = $this->now();
+                $datas[ $key ]->updated_at = $this->now();
+                $datas[ $key ]->user_id = $value->user_id;
+                $datas[ $key ]->status = $value->status;
+                $datas[ $key ]->description = $value->description ?? '';
             }
-            
-            // $data = str_replace('{','[',$data);
-            // $data = str_replace('}',']',$data);
-            $b=[[
-                "user"=> 1
-            ],
-                "user"=> 2
-        ];
-                
-            
-            $c = json_encode( $b ) ;
-            // var_dump( $c );
-            $a = json_decode( $data );
+
             // var_dump( $a );
 
-            foreach ($a as $key => $value) {
-                $created_at = ["created_at" => $this->now()];
-                $a->$key[] = $created_at;
-            }
+            
+            $AbsenModel = new AbsensModel();
 
-            var_dump($a);
+            $AbsenModel->insertBatch( $datas );
 
         }
 

@@ -197,6 +197,14 @@ class Request
 
     /**
      * 
+     * @param { string } data , data must be convert to JSON.stringify 
+     */
+    addAbsensMultiple( data ){
+        return this.request('/absens/multiple',"POST", null, data , { "key" : this.api_key });
+    }
+
+    /**
+     * 
      * @param { Number } $absen_id 
      * @param { Object } data 
      * @param { String } data.status

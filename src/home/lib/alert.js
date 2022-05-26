@@ -50,12 +50,13 @@ function alertToast(title = "success", text = "success menambakan", icon = "succ
  * @param { String } text_button 
  * @returns { Promise{ bool } } 
  */
-function confirm( title= "Yakin!!!", text_button = "Oke" ){
+function confirm( title= "Yakin!!!", text_button = "Oke", text = "Yakin ?" ){
 	return new Promise( ( resolve, reject ) => {
 		Swal.fire({
 			title: title,
+			text : text,
 			showCancelButton: true,
-			confirmButtonText: 'Oke',
+			confirmButtonText: text_button,
 		}).then((result) => {
 			console.log({ result });
 			if (result.isConfirmed) {

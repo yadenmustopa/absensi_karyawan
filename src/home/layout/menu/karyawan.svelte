@@ -6,6 +6,7 @@
     import ModalUpdate from '../modal/update_karyawan.svelte';
     import ModalHistory from '../modal/history_absensi.svelte';
     import ModalChangePhoto  from '../modal/change_photo.svelte';
+   
 
     let search;
     let users = [];
@@ -96,7 +97,8 @@
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
                 <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama / alamat..." aria-label="search" aria-describedby="basic-addon1">
-              </div>
+            </div>
+            
         </div>
     </div>
 
