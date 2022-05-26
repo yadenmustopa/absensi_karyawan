@@ -2,8 +2,8 @@
     "use strict";
     import Rest from '../../modul/Request';
     import { convertToDate } from '../../lib/handle-moment';
-    // import ModalAdd from '../modal/add_jabatan';
-    // import ModalUpdate from '../modal/update_jabatan.svelte';
+    import ModalAdd from '../modal/add_jabatan';
+    import ModalUpdate from '../modal/update_jabatan.svelte';
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
     // import { createEventDispatcher } from 'svelte';
@@ -87,13 +87,6 @@
 </script>
 
 <div class="row mt-4 d-none page page-jabatan">
-    <div class="col-12 d-flex justify-content-end p-4 pt-0 pb-2">
-        <button class="btn bg-gradient-info btn-round btn-icon text-white" data-bs-toggle="modal"
-        data-bs-target="#modal-add-jabatan">
-            <i class="icon fas fa-plus"></i>
-        </button>
-    </div>
-
     <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4">
         <div class="card p-4">
             <div>
@@ -108,7 +101,14 @@
 
     <div class="col-lg-8 col-sm-12 col-md-12 wrap-content ">
         <div class="card mb-4">
-            <h2 class="mt-4 ms-4">Daftar Jabatan / Bagian </h2>
+            <div class="col-12 d-flex justify-content-between p-4 pt-0 pb-2">
+                <h3 class="mt-4 ms-0">Daftar List Jabatan</h3>
+                <div class="btn-title d-flex align-items-center mt-4">
+                    <button class="btn bg-gradient-info btn-round btn-icon text-white" data-bs-toggle="modal" data-bs-target="#modal-add-jabatan">
+                        <i class="icon fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
 
             <div class="card-body row">
                 <div class="table-responsive">
@@ -138,9 +138,6 @@
                                     <button class="btn btn-warning btn-icon btn-round me-2" on:click={ () => { changeDataSelected( { name : jabatan.name, id : jabatan.id, description:jabatan.description  }) } } data-bs-target="#modal-update-jabatan" data-bs-toggle="modal">
                                         <i class="icon fas fa-edit text-white"></i>
                                     </button>
-                                    <button class="btn btn-info btn-icon btn-round " on:click={ () => { changeDataSelected( { name : jabatan.name, id : jabatan.id, description:jabatan.description  }) } } data-bs-target="#modal-update-jabatan" data-bs-toggle="modal">
-                                        <i class="icon fas fa-plus text-white"></i>
-                                    </button>
                                 </td>
                                
                             </tr>
@@ -161,7 +158,6 @@
     
 </div>
 
-<!-- 
+
 <ModalAdd on:success={  starter }></ModalAdd>
 <ModalUpdate data_selected = { data_selected } on:success={ starter }></ModalUpdate>
-<ModalUpdatePwd data_selected = { data_selected } on:success={ starter }></ModalUpdatePwd> -->

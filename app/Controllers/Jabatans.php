@@ -12,19 +12,71 @@ class Jabatans extends ApiController
 
     public function index()
     {
-        $search = $this->request->getGet('search');
-        $sql = "";
-        
-        $JabatansModel = new JabatansModel();
+        $JabatansModel = new JabatansModel();   
+        $search        = $this->request->getGet('search');
+        $page          = ( int )$this->request->getGet('page') ?? 1 ;
+        $per_page      = ( int )$this->request->getGet('per_page') ?? 10 ;
+        $sort_by       = $this->request->getGet('sort_by')?? "id:DESC";
+        $filter        = $this->request->getGet('filter');
+
         if( $search ){
-            $sql = $JabatansModel->like('name',$search)->orLike('description', $search)->get()->getResultArray();
-        }else{
-            $sql = $JabatansModel->get()->getResultArray();
+            $JabatansModel->like("name", $search);
+            $JabatansModel->orlike("description", $search);
         }
 
-        $data = ["data" => $sql ];
         
-        return $this->successOutput( $data );
+        if( $filter ){
+            $i_f    = 0;
+            $filter = explode(';', $filter);
+            
+            foreach ($filter as $d_f) {
+                $f = explode(':', $d_f);
+        
+                $key   = $f[0];
+                $value = $f[1];
+     
+                if ($i_f === 0 ){
+                    $JabatansModel->where( $key , $value);
+                }else{
+                    $JabatansModel->orWhere( $key, $value);
+                }
+
+                $i_f++;
+            }
+        }
+
+        if( $sort_by ){
+            $sort = explode(":", $sort_by );
+
+            var_dump( $sort );
+            // $JabatansModel->orderBy( $sort[0], $sort[1]);
+            $JabatansModel->orderBy( "name", "DESC");
+        }
+
+        $count_all = $JabatansModel->get()->getNumRows();
+        
+        $offset    = ( $page - 1 ) * $per_page;
+        
+        if( $page || $per_page  ){
+            $JabatansModel->offset( $offset );
+            $JabatansModel->limit( $per_page );
+        }
+
+        $data = $JabatansModel->get()->getResultArray();
+     
+        $pagination = [
+            "per_page" => (int)$per_page,
+            "page"     => (int)$page,
+            "offset"   => (int)$offset,
+            "count_all" => (int)$count_all,
+        ];
+
+        $output = [
+           "pagination" => $pagination,
+           "data"       => $data,
+        ];
+
+        return $this->successOutput( $output );
     }
 
     public function add()

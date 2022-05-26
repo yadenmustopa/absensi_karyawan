@@ -43,6 +43,19 @@ class KeyOSApi {
 
         return RestApi.call(request).catch((err) => {
             let body = err.getBody();
+
+            console.log( { err, body });
+
+            let code = body.code;
+            let message = body.message;
+
+            // if( code === 500 && message ==="Call to a member function getGet() on null"){
+            //     localStorage.setItem('ak-key','');
+            //     localStorage.setItem('ak-data-user','');
+            //     window.location.href = "/";
+            // }
+
+            
             
             preloader.hide();
 

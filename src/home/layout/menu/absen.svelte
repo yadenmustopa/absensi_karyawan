@@ -157,8 +157,10 @@
             let data = [];
             users_no_absened.forEach( ( item )=>{
                 let user_id = item.user_id;
-                let status  = "TANPA_KETERANGAN";
+                let status  = status;
                 data.push({ user_id, status });
+
+                starter();
             });
             
             data = JSON.stringify( data );
@@ -350,7 +352,7 @@
                                     </td>
                                 </tr>
                             { :else }
-                                <td colspan="6">
+                                <td colspan="7">
                                     <div class="alert alert-danger text-white m-0">Data Tidak Di temukan</div>
                                 </td>
                             {/each}

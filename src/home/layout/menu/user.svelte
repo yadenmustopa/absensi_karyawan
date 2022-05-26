@@ -113,12 +113,7 @@
 </script>
 
 <div class="row mt-4 d-none page page-user">
-    <div class="col-12 d-flex justify-content-end p-4 pt-0 pb-2">
-        <button class="btn bg-gradient-info btn-round btn-icon text-white" data-bs-toggle="modal"
-        data-bs-target="#modal-add-user">
-            <i class="icon fas fa-plus"></i>
-        </button>
-    </div>
+   
 
     <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4">
         <div class="card p-4">
@@ -134,7 +129,14 @@
 
     <div class="col-lg-8 col-sm-12 col-md-12 wrap-content ">
         <div class="card mb-4">
-            <h2 class="mt-4 ms-4">Daftar User</h2>
+            <div class="col-12 d-flex justify-content-between p-4 pt-0 pb-2">
+                <h3 class="mt-4 ms-0">Daftar User</h3>
+                <button class="btn bg-gradient-info btn-round btn-icon text-white mt-4 ms-4" data-bs-toggle="modal"
+                data-bs-target="#modal-add-user">
+                    <i class="icon fas fa-plus"></i>
+                </button>
+            </div>
+            
 
             <div class="card-body row">
                 <div class="table-responsive">

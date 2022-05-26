@@ -10,11 +10,23 @@
 
         public function index()
         {
-            $karyawans_model = new KaryawansModel();
-            $sql            = $karyawans_model->findAll();
+            $karyawans_model  = new KaryawansModel();
+            $sql              = $karyawans_model->findAll();
+            $count_all_result = $this->getCountResultArray();
+ 
+            $data = [ 
+                "data"      => $sql,
+                "count_all" => $count_all_result,
+            ];
 
-            $data = [ "data" => $sql ];
             return $this->successOutput( $data );
+        }
+
+        private function getCountResultArray(){
+            
+            $karyawans_model = new KaryawansModel();
+            $sql             = $karyawans_model->get()->getNumRows();
+            return $sql;
         }
 
         public function add()
@@ -76,7 +88,7 @@
             $address         = $this->request->getVar('address');
             $position        = $this->request->getVar('position');
             $salary          = $this->request->getVar('salary');
-            $no_hp          = $this->request->getVar('no_hp');
+            $no_hp           = $this->request->getVar('no_hp');
             $now             = Time::now('Asia/Jakarta','id')->getTimestamp();
          
             $data = [

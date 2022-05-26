@@ -9,50 +9,157 @@
 
     class Absens extends ApiController
     {
+
+        
         public function index()
         {
             $search        = $this->request->getGet('search') ;
+            $page          = (int)$this->request->getGet('page') ?? 1;
+            $per_page      = (int)$this->request->getGet('per_page') ?? 10;
+            
+            $sort_by       = $this->request->getGet('sort_by');
+            $filter        = $this->request->getGet('filter');
+            
             $has_absen     = $this->request->getGet('has_absen') ;
             $start_date    = $this->request->getGet('start_date') ?? strtotime( date('m-01-Y 00:00:00' ) );
             $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $search = trim( $search );
 
-            $base        = $this->getSyntax( $search, $start_date, $end_date, $has_absen);
-            $users_model = new UsersModel();
-            
-            $sql      = $users_model->db->query( $base );
-            $response = $sql->getResult('array');
-            $data     = [ "data" => $response ];
+            $output = $this->getSyntax( $search, $start_date, $end_date, $has_absen, $sort_by, $filter, $page, $per_page);
 
-            return $this->successOutput( $data, 200 ) ;
+            return $this->successOutput( $output, 200 ) ;
         }
 
-        private function getSyntax( $search, $start_date, $end_date , $has_absen = "Y" )
+
+        private function getSyntax( $search, $start_date, $end_date , $has_absen = "Y", $sort_by, $filter = "", $page = 1, $per_page = 10 )
         {
+            $AbsenModel = new AbsensModel();
+
             $base = "";
+
             if( $has_absen === 'N'){
-                if( $search ){
-                    $base = "SELECT * FROM `users` CROSS JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id`  WHERE `users`.`id` NOT IN ( SELECT `user_id` FROM `absens` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date ) AND `users`.`name` LIKE '%$search%' OR `karyawans`.`address` LIKE '%$search%'";
-                    // $base = "SELECT * FROM `users`  JOIN `karyawans` ON `users`.`id` = `karyawans`.`id` WHERE NOT EXISTS  ( SELECT `absens`.`user_id` FROM `absens` WHERE `users`.`id` = `absens`.`user_id` AND (`absens`.`created_at` BETWEEN $start_date AND $end_date ) )";
-                    // $base = "SELECT * FROM `users`  JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id` ";
-                }else{
-                    $base = "SELECT * FROM `users` CROSS JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id`  WHERE `users`.`id` NOT IN ( SELECT `user_id` FROM `absens` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date )";
-                    // $base = "SELECT * FROM `users`  JOIN `karyawans` ON `users`.`id` = `karyawans`.`id` WHERE NOT EXISTS  ( SELECT `absens`.`user_id` FROM `absens` WHERE `users`.`id` = `absens`.`user_id` AND `absens`.`created_at` BETWEEN $start_date AND $end_date  )";
-                }
-
+                $base = $this->getNoAbsen( $search, $start_date, $end_date, $sort_by , $filter, $page, $per_page );
             }else{
-                $base = "SELECT `absens`.`id` AS `absen_id`, `users`.`name` AS `name`,`karyawans`.`position` AS `position`,`absens`.`created_at` AS `created_at`,`absens`.`status` AS `status`,`absens`.`description` AS `description` FROM `users` CROSS JOIN `absens` ON `absens`.`user_id` = `users`.`id` CROSS JOIN `karyawans` ON `users`.`id`=`karyawans`.`user_id` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date";
+                $base = $this->getHasAbsen( $search, $start_date, $end_date, $sort_by, $filter, $page, $per_page );
+            }
 
-                if( $search ){
-                    $base .=" AND `users`.`name` LIKE '%$search%' ";
-                }
+            $data = $AbsenModel->db->query( $base["sql"] )->getResultArray();
+
+            $pagination = [
+                "per_page" => (int)$per_page,
+                "page"     => (int)$page,
+                "offset"   => (int)$base["offset"],
+                "count_all" => (int)$base["count_all"],
+            ];
+
+            $output = [
+               "pagination" => $pagination,
+               "data" => $data,
+            ];
+
+            return $output;
+        }
+
+        private function getNoAbsen( $search, $start_date, $end_date, $sort_by = "`users`.`id`:DESC", $filter, $page, $per_page ){
+            $AbsenModel = new AbsensModel();
+
+            $base = "";
+
+            if( $search ){
+                $base = "SELECT * FROM `users` CROSS JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id`  WHERE `users`.`id` NOT IN ( SELECT `user_id` FROM `absens` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date ) AND `users`.`name` LIKE '%$search%' OR `karyawans`.`address` LIKE '%$search%'";
+            }else{
+                $base = "SELECT * FROM `users` CROSS JOIN `karyawans` ON `users`.`id` = `karyawans`.`user_id`  WHERE `users`.`id` NOT IN ( SELECT `user_id` FROM `absens` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date )";
             }
 
 
+            if( $filter ){
+                $i_f    = 0;
+				$filter = explode(';', $filter);
+				
+				foreach ($filter as $d_f) {
+					$f = explode(':', $d_f);
+			
+					$key   = $f[0];
+					$value = $f[1];
+				
+				
+					$base.=" AND $key = '$value'";
+	
+					$i_f++;
+				}
+            }
 
-            return $base;
+            if( $sort_by ){
+                $sort = explode(":", $sort_by );
+
+                $base.=" ORDER BY $sort[0] $sort[1]";
+            }
+
+            $count_all = $AbsenModel->db->query( $base )->getNumRows();
+            
+            $offset    = ( $page - 1 ) * $per_page;
+            
+            if( $page || $per_page  ){
+                $base.=" LIMIT $per_page OFFSET $offset";
+            }
+            
+            
+
+            return [ "sql" => $base, "count_all" => $count_all, "offset" => $offset ];
         }
+
+
+        private function getHasAbsen( $search, $start_date, $end_date, $sort_by = "`absens`.`id`:DESC", $filter, $page, $per_page ){
+            $base = "SELECT `absens`.`id` AS `absen_id`, `users`.`name` AS `name`,`karyawans`.`position` AS `position`,`absens`.`created_at` AS `created_at`,`absens`.`status` AS `status`,`absens`.`description` AS `description` FROM `users` CROSS JOIN `absens` ON `absens`.`user_id` = `users`.`id` CROSS JOIN `karyawans` ON `users`.`id`=`karyawans`.`user_id` WHERE `absens`.`created_at` BETWEEN $start_date AND $end_date";
+            
+            if( $search ){
+                $base .=" AND `users`.`name` LIKE '%$search%' ";
+            }
+
+
+            if( $filter ){
+                $i_f    = 0;
+				$filter = explode(';', $filter);
+				
+				foreach ($filter as $d_f) {
+					$f = explode(':', $d_f);
+			
+					$key   = $f[0];
+					$value = $f[1];
+				
+				
+					$base.=" AND $key = '$value'";
+	
+					$i_f++;
+				}
+            }
+
+
+            if( $sort_by ){
+                $sort = explode(":", $sort_by );
+
+                $base.=" ORDER BY $sort[0] $sort[1]";
+            }
+
+            
+
+            $AbsenModel= new AbsensModel();
+            $count_all = $AbsenModel->db->query( $base )->getNumRows();
+            
+
+            $offset = ( $page - 1 ) * $per_page;
+
+           
+            if( $page || $per_page  ){
+                $base.=" LIMIT $per_page OFFSET $offset";
+            }
+
+            return [ "sql" => $base, "count_all" => $count_all, "offset" => $offset ];
+        }
+
+
+
 
         public function getById( $user_id ){
             $search        = $this->request->getGet('search') ;
@@ -101,7 +208,6 @@
 
         public function multiAdd(){
             $data = $this->request->getPost('absens');
-            var_dump( $data );
 
             if( ! $data )return $this->errorOutput("Data Tidak Boleh Kosong");
     
@@ -119,11 +225,7 @@
                 $datas[ $key ]->description = $value->description ?? '';
             }
 
-            // var_dump( $a );
-
-            
             $AbsenModel = new AbsensModel();
-
             $AbsenModel->insertBatch( $datas );
 
         }

@@ -11,45 +11,141 @@
     {
         public function index()
         {
-            $search        = $this->request->getGet('search');
+            $search        = trim( $this->request->getGet('search') );
+            $page          = ( int )$this->request->getGet('page') ?? 1 ;
+            $per_page      = ( int )$this->request->getGet('per_page') ?? 10 ;
+            $sort_by       = $this->request->getGet('sort_by');
+            $filter        = $this->request->getGet('filter');
+
             $identity      = $this->request->getGet('with_identity');
-            $search        = trim( $search );
-            $response      = [];
+            $output        = [];
 
             if( $identity === "Y"){
-                $response = $this->withIdentity( $search );
+                $output = $this->withIdentity( $search, $sort_by, $filter, $page, $per_page );
             }else{
-                $response = $this->noIdentity( $search );
+                $output = $this->noIdentity( $search, $sort_by, $filter, $page, $per_page );
             }
             
-           
-
-            $data = ["data" => $response ];
-            return $this->successOutput( $data, 200 ) ;
+    
+            return $this->successOutput( $output, 200 ) ;
         }
 
-        private function withIdentity( $search = ""){
-            $users_model = new UsersModel();
-            $base = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary`, `karyawans`.`id` AS `karyawan_id`, `users`.`id` AS `user_id` FROM `users` RIGHT JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
-
+        private function withIdentity( $search = "", $sort_by = "", $filter = "", $page, $per_page ){
+            $UsersModel = new UsersModel();
+            $base        = "SELECT `users`.`name` AS `name`,`users`.`created_at` AS `created_at`,`users`.`username` AS `username`,`users`.`role`AS`status`,`karyawans`.`address` AS `address`,`karyawans`.`position` AS `position`,`karyawans`.`no_hp` AS `no_hp`, `karyawans`.`photo` AS `photo`, `karyawans`.`salary` AS `salary`, `karyawans`.`id` AS `karyawan_id`, `users`.`id` AS `user_id` FROM `users` RIGHT JOIN `karyawans` ON `karyawans`.`user_id` = `users`.`id`";
             
             if( $search ){
                 $base .= " WHERE `users`.`name` LIKE '%$search%' OR  `users`.`username` LIKE '% $search%' OR `karyawans`.`address` LIKE '%$search%'  ";
             }
+            
 
-            $sql = $users_model->db->query( $base );
+            if( $filter ){
+                $i_f    = 0;
+				$filter = explode(';', $filter);
+				
+				foreach ($filter as $d_f) {
+					$f = explode(':', $d_f);
+			
+					$key   = $f[0];
+					$value = $f[1];
+				
+				
+					$base.=" AND $key = '$value'";
+	
+					$i_f++;
+				}
+            }
 
-            return $sql->getResult('array');
+            if( $sort_by ){
+                $sort = explode(":", $sort_by );
+
+                $base.=" ORDER BY $sort[0] $sort[1]";
+            }
+
+            $count_all = $UsersModel->db->query( $base )->getNumRows();
+            
+            $offset    = ( $page - 1 ) * $per_page;
+            
+            if( $page || $per_page  ){
+                $base.=" LIMIT $per_page OFFSET $offset";
+            }
+
+            $data = $UsersModel->db->query( $base )->getResultArray();
+         
+            $pagination = [
+                "per_page" => (int)$per_page,
+                "page"     => (int)$page,
+                "offset"   => (int)$offset,
+                "count_all" => (int)$count_all,
+            ];
+
+            $output = [
+               "pagination" => $pagination,
+               "data" => $data,
+            ];
+
+
+            return $output;
         }
 
-        private function noIdentity( $search ){
+        private function noIdentity(  $search = "", $sort_by = "", $filter = "", $page, $per_page ){
 
             $UsersModel  = new UsersModel();
             if( $search ){
-                return $UsersModel->like("name", $search)->get()->getResultArray();
-            }else{
-                return $UsersModel->get()->getResultArray();
+                $UsersModel->like("name", $search);
             }
+
+            if( $filter ){
+                $i_f    = 0;
+				$filter = explode(';', $filter);
+				
+				foreach ($filter as $d_f) {
+					$f = explode(':', $d_f);
+			
+					$key   = $f[0];
+					$value = $f[1];
+				
+                    if ($i_f === 0 ){
+						$UsersModel->where( $key , $value);
+					}else{
+						$UsersModel->orWhere( $key, $value);
+					}
+	
+					$i_f++;
+				}
+            }
+
+            if( $sort_by ){
+                $sort = explode(":", $sort_by );
+
+                $UsersModel->orderBy( $sort[0], $sort[1]);
+            }
+
+            $count_all = $UsersModel->get()->getNumRows();
+            
+            $offset    = ( $page - 1 ) * $per_page;
+            
+            if( $page || $per_page  ){
+                $UsersModel->offset( $offset );
+                $UsersModel->limit( $per_page );
+            }
+
+            $data = $UsersModel->get()->getResultArray();
+         
+            $pagination = [
+                "per_page" => (int)$per_page,
+                "page"     => (int)$page,
+                "offset"   => (int)$offset,
+                "count_all" => (int)$count_all,
+            ];
+
+            $output = [
+               "pagination" => $pagination,
+               "data" => $data,
+            ];
+
+            return $output;
+
         }
 
 

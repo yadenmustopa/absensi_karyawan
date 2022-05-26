@@ -166,6 +166,7 @@ class Request
      * @param { string } data.search 
      * @param { string } data.start_date
      * @param { string } data.end_date
+     * @param { "Y","N"} data.has_absen
      * @returns 
      */
     getAbsens( data = {} ){
@@ -257,8 +258,9 @@ class Request
      * @param { Number } jabatan_id 
      * @returns 
      */
-    deleteJabatans( jabatan_id ){
-        return this.request('/jabatans/' + jabatan_id, "DELETE" , null, { key : this.api_key });
+    deleteJabatans( jabatan_id = 0 ){
+        console.log({ jabatan_id })
+        return this.request('/jabatans/' + jabatan_id, "DELETE" , null, null, { key : this.api_key });
     }
 }
 

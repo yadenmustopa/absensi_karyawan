@@ -1,38 +1,58 @@
 <script>
     "use strict";
     import Rest from '../../modul/Request';
+    import { getToday, stringDateToFormat } from '../../lib/handle-moment';
 
     let search;
-    let users = [];
+    let count_all_karyawan;
+    let users      = [];
+    let start_date = getToday('YYYY-MM-DD');
+    let end_date   = getToday('YYYY-MM-DD');
     starter();
 
     function starter(){
-        getDataAbsens();
+        defaultRangeDate();
+        getCountAllKaryawan();
     }
 
-    function getDataAbsens(){
-
+    function defaultRangeDate(){
+        start_date = stringDateToFormat( start_date + ' 00:00:00' );
+        end_date   = stringDateToFormat( start_date + ' 00:00:00' );
     }
+
+    function getCountAllKaryawan(){
+        let Request = new Rest();
+
+        let request = Request.getKaryawan();
+
+        request.then( ( res )=>{
+            let body = res.getBody();
+            count_all_karyawan = body.count_all_result;
+
+            console.log( { body, count_all_karyawan });
+        });
+    }
+
+    function getNotAbsened(){
+        let Request = new Rest();
+        let data    = { has_absen : "N", start_date, end_date }
+        let request = Request.getAbsens( data );
+        
+
+        request.then( ( res )=>{
+            let body = res.getBody();
+            // count_all_karyawan = body.count_all_result;
+            console.log( { body });
+        });
+    }
+
 </script>
 
 <div class="row mt-0 d-none page page-dashboard">
     
-    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4 ">
+    <div class="col-lg-4 col-sm-12 mb-lg-3 mb-12 ">
         <div class="card p-3">
-            <div>
-                <label>Cari : </label>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Cari Nama / alamat..." aria-label="search" aria-describedby="basic-addon1">
-              </div>
-        </div>
-    </div>
-    <div class="col-lg-8 col-sm-12 wrap-content">
-        <div class="card card-background-mask-info">
-            { #each users as user }
-                
-            { /each }
+            
         </div>
     </div>
     
