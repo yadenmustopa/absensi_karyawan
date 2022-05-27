@@ -38,6 +38,7 @@
                 $base .= " WHERE `users`.`name` LIKE '%$search%' OR  `users`.`username` LIKE '% $search%' OR `karyawans`.`address` LIKE '%$search%'  ";
             }
             
+            
 
             if( $filter ){
                 $i_f    = 0;
@@ -48,9 +49,15 @@
 			
 					$key   = $f[0];
 					$value = $f[1];
+                    
+                    if( !$search && $i_f === 0 ){
+                        $base.=" WHERE ";
+                    }else{
+                        $base.=" AND ";
+                    }
+                    
 				
-				
-					$base.=" AND $key = '$value'";
+					$base.="$key $value";
 	
 					$i_f++;
 				}
@@ -71,6 +78,7 @@
             if( $page || $per_page  ){
                 $base.=" LIMIT $per_page OFFSET $offset";
             }
+
 
             $data = $UsersModel->db->query( $base )->getResultArray();
          
@@ -113,13 +121,11 @@
 
                     if( !$search && $i_f === 0 ){
                         $sql.=" WHERE ";
-                    }else if( $search && $i_f === 0){
-                        $sql.=" AND ";
                     }else{
-                        $sql.=" OR ";
+                        $sql.=" AND ";
                     }
                     
-                    $sql.="$key='$value' ";
+                    $sql.="$key $value";
 					$i_f++;
 				}
             }

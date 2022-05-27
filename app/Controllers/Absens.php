@@ -84,7 +84,7 @@
 					$value = $f[1];
 				
 				
-					$base.=" AND $key = '$value'";
+					$base.=" AND $key $value";
 	
 					$i_f++;
 				}
@@ -129,7 +129,6 @@
 			
 					$key   = $f[0];
 					$value = $f[1];
-				
 				
 					$base.=" AND $key = '$value'";
 	

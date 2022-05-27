@@ -59,24 +59,28 @@
                         <form role="form text-left">
                             <label>Nama:</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
                                 <input type="text" class="form-control" placeholder="Nama" aria-label="Nama" bind:value = { name }
                                     aria-describedby="email-addon">
                             </div>
                             
                             <label>Username:</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
                                 <input type="text" class="form-control" placeholder="Username" bind:value = { username }
                                     aria-label="username" >
                             </div>
 
                             <label>Password:</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
                                 <input type="password" class="form-control" placeholder="Password" bind:value={ password }
                                     aria-label="Password" aria-describedby="password-addon">
                             </div>
 
                             <label>Konfirmasi Password:</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
                                 <input type="password" class="form-control" placeholder="Ketik Ulang Password" bind:value={ confirmation_password }
                                     aria-label="confirmation_password" aria-describedby="password-addon">
                             </div>

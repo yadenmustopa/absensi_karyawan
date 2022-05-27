@@ -12,6 +12,7 @@
     let no_hp        = "";
     let karyawan_id  = 0;
     let jabatans     = [];
+    let name         = "";
 
     const dispatch = createEventDispatcher();
 
@@ -46,6 +47,7 @@
         salary       = data.salary;
         no_hp        = data.no_hp;
         karyawan_id  = data.karyawan_id;
+        name         = data.name;
     }
 
     function updateKaryawan()
@@ -79,16 +81,18 @@
             <div class="modal-body p-0">
                 <div class="card card-plain">
                     <div class="card-header pb-0 text-left">
-                        <h4 class="font-weight-bolder text-info text-gradient text-center">Update Data Karyawan</h4>
+                        <h4 class="font-weight-bolder text-info text-gradient text-center">Update Data { name }</h4>
                     </div>
                     <div class="card-body">
                         <form role="form text-left">
                             <label>Adress:</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-address-book"></i></span>
                                 <input type="text" class="form-control" placeholder="Alamat" aria-label="Address" bind:value = { address }
                                     aria-describedby="email-addon">
                             </div>
                             
+                            <label>Posisi/Bag:</label>
                             <select class="form-select" aria-label="Default select example" bind:value= { position }>
                                 { #each jabatans as jabatan }
                                     <option value={ jabatan.name }>{ jabatan.name }</option>
@@ -97,13 +101,15 @@
                             
                             <label>No Hp:</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="No Hp" aria-label="Address" bind:value = { no_hp }
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-mobile"></i></span>
+                                <input type="text" class="form-control" placeholder="No Hp" aria-label="No Hp" bind:value = { no_hp }
                                     aria-describedby="email-addon">
                             </div>
 
 
                             <label> Gaji/bln :</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-money-bill"></i></span>
                                 <input type="number" class="form-control" placeholder="Gaji / Bln...." aria-label="Address" bind:value = { salary }
                                     aria-describedby="email-addon">
                             </div>

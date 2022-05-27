@@ -4,6 +4,8 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 use CodeIgniter\I18n\Time;
+use App\Models\UsersModel;
+use App\Controllers\Karyawans;
 
 class FirstUser extends Seeder
 {
@@ -14,8 +16,9 @@ class FirstUser extends Seeder
 
     private function insert()
     {
+        $UsersModel = new UsersModel();
         $now      = Time::now('Asia/Jakarta','id')->getTimestamp();
-        $db       = \Config\Database::connect();
+        // $db       = \Config\Database::connect();
         $password = sha1("admin");
         $data     = [
             'name'=>'ADMIN',
@@ -26,11 +29,15 @@ class FirstUser extends Seeder
             'updated_at' => $now
         ];
 
-        $db->transStart();
-        $db->table('users')->insert( $data );
-        $db->transComplete();
+        $UsersModel->transStart();
+            $UsersModel->table('users')->insert( $data );
+            $id = $UsersModel->getInsertID();
+            
+            $Karyawans = new Karyawans();
+            $Karyawans->addTemp( $id );
+        $UsersModel->transComplete();
 
-        if( $db->transStatus() === false ) {
+        if( $UsersModel->transStatus() === false ) {
             echo "Admin Gagal Dibuat";
         }else{
             echo "Admin Pertama sudah dibuat";

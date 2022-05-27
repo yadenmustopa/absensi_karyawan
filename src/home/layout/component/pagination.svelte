@@ -4,6 +4,8 @@
     import scrollTopPage from '../../lib/scroll_top_page';
 
     export let data;
+    export let _class;
+    export let _label;
 
     const dispatch = createEventDispatcher();
 
@@ -55,24 +57,33 @@
     }
 
 </script>
-<div class="d-flex justify-content-center pagination mt-4 mb-4">
-    { #if count_all }
-        { #if page > 1 }
-            <button type="button" class="btn btn-round btn-icon m-1" on:click={ () => { directPage( page - 1 ) }}>
-                <i class="icon fas fa-arrow-left"></i>
-            </button>
-        { /if }
-        
-        { #each arrayOfStepNumber( start_page, end_page ) as pag_page, i }
-            <button type="button" class="btn btn-round btn-icon m-1 { ( page === pag_page ) ? 'bg-gradient-info' : 'btn-gradient-wite' }" on:click={ () => { directPage( pag_page ) }}>
-                { pag_page }
-            </button>
-        { /each }
 
-        { #if page < jumlah_page }
-            <button type="button" class="btn btn-round btn-icon m-1 " on:click={ () => { directPage( page + 1 ) }}>
-                <i class="icon fas fa-arrow-right"></i>
-            </button>
+
+{ #if jumlah_page > 1 }
+    <div class="{ _class }">
+        { #if _label }
+            <label>{ _label } </label>
         { /if }
-    { /if }
-</div>
+        <div class="d-flex justify-content-center pagination">
+            { #if count_all }
+                { #if page > 1 }
+                    <button type="button" class="btn btn-round btn-icon m-1" on:click={ () => { directPage( page - 1 ) }}>
+                        <i class="icon fas fa-arrow-left"></i>
+                    </button>
+                { /if }
+                
+                { #each arrayOfStepNumber( start_page, end_page ) as pag_page, i }
+                    <button type="button" class="btn btn-round btn-icon m-1 { ( page === pag_page ) ? 'bg-gradient-info' : 'btn-gradient-wite' }" on:click={ () => { directPage( pag_page ) }}>
+                        { pag_page }
+                    </button>
+                { /each }
+
+                { #if page < jumlah_page }
+                    <button type="button" class="btn btn-round btn-icon m-1 " on:click={ () => { directPage( page + 1 ) }}>
+                        <i class="icon fas fa-arrow-right"></i>
+                    </button>
+                { /if }
+            { /if }
+        </div>
+    </div>
+{ /if }

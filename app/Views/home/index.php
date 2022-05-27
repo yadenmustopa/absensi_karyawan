@@ -21,7 +21,7 @@
     <link id="pagestyle" href="<?= base_url();?>/dist/soft-ui.css" rel="stylesheet" />
 
 
-    <link rel="stylesheet" href="<?= base_url(); ?>/dist/home.css">
+    <link rel="stylesheet" href="<?= base_url(); ?>/dist/home.css?_=<?= time(); ?>">
     <link rel="icon" href="<?= base_url(); ?>/assets/images/icon.ico" type="image/png">
 
     <title>Absensi Karyawan</title>
@@ -45,7 +45,7 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <!-- Core -->
-<script src="<?= base_url()?>/dist/soft-ui.js"></script>
+<script src="<?= base_url()?>/dist/soft-ui.js?_=<?= time(); ?>"></script>
 
 <script src="<?= base_url(); ?>/dist/home.js?_=<?= time(); ?>"></script>
 

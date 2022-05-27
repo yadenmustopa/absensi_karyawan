@@ -1,6 +1,7 @@
 <script>
     "use strict";
     import Rest from '../../modul/Request';
+    import { onMount } from 'svelte';
     import { convertToDate, getToday,stringDateToFormat } from '../../lib/handle-moment';
     import ModalAdd from '../modal/add_absen.svelte';
     import ModalUpdate from '../modal/update_absen.svelte';
@@ -12,6 +13,7 @@
     import getColorBgStatus from '../../lib/bg_status_absen';
     import PaginationNoABsen from '../component/pagination.svelte';
     import PaginationHasABsen from '../component/pagination.svelte';
+    import daterangepicker from 'daterangepicker';
     // import { createEventDispatcher } from 'svelte';
 
     // const dispatch     = createEventDispatcher();
@@ -72,6 +74,10 @@
         getUserHasAbsened();
         getUserNoAbsened();
     }
+
+    onMount( () => {
+        instanceDatePicker();
+    })
 
     // $:if( restart ){
     //     toggleRestart();
@@ -222,6 +228,17 @@
     }
 
 
+    //instanse date range picker
+    function instanceDatePicker()
+    {
+        window.jquery('input[name="datetimes"]').daterangepicker({
+            opens: 'left'
+        }, function(start, end, label) {
+            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
+    }
+
+
 </script>
 
 <div class="row mt-4 d-none page page-absen">
@@ -242,7 +259,8 @@
 
                 <div class="d-block">
                     <label>Pilih Tanggal :</label><br/>
-                    <div class="wrap-date-range">
+                    <input type="text" name="datetimes" />
+                    <!-- <div class="wrap-date-range">
                         <DateRangeSelect
                             name    = { name_datepicker }
                             heading = { heading_datepicker }
@@ -253,11 +271,11 @@
                             {endDateId}
                             on:onApplyDateRange = {handleApplyDateRange} 
                         />
-                    </div>
+                    </div> -->
                 </div>
     
-                <div class="d-flex justify-content-end mt-sm-4 mt-md-4">
-                    <button type="button" class="btn bg-gradient-danger" on:click={ resetFilter }>
+                <div class="d-flex justify-content-end mt-sm-4 mt-md-4 w-100">
+                    <button type="button" class="btn bg-gradient-danger w-100" on:click={ resetFilter }>
                         <i class="fas fa-history text-white"></i> &nbsp; Reset Filter
                     </button>
                 </div>
@@ -266,7 +284,7 @@
 
         <div class="card p-4 mt-4">
             <label>Navigation : </label>
-            <Pagination data = { pagination_has_absen } on:click = { changePageHasAbsen }></Pagination>
+            <PaginationHasABsen data = { pagination_has_absen } on:click = { changePageHasAbsen }></PaginationHasABsen>
         </div>
     </div>
 
