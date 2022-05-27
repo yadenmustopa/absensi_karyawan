@@ -122,6 +122,11 @@
             $data = base64_decode($img);
             // var_dump( $data );
             $uniq_id = uniqid();
+
+            if( !file_exists( FCPATH.'/uploads/') ){
+                // create folder uploads
+                mkdir( FCPATH.'/uploads/', 0777, true );
+            }
             
             $file = FCPATH.'/uploads/' . $uniq_id . '.webp';
 

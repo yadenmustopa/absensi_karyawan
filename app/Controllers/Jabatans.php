@@ -12,16 +12,16 @@ class Jabatans extends ApiController
 
     public function index()
     {
-        $JabatansModel = new JabatansModel();   
         $search        = $this->request->getGet('search');
-        $page          = ( int )$this->request->getGet('page') ?? 1 ;
-        $per_page      = ( int )$this->request->getGet('per_page') ?? 10 ;
-        $sort_by       = $this->request->getGet('sort_by')?? "id:DESC";
+        $page          = ( $this->request->getGet('page') ) ? ( int )$this->request->getGet('page') : 1;
+        $per_page      = ( $this->request->getGet('per_page') ) ? ( int ) $this->request->getGet('per_page') :  10 ;
+        $sort_by       = ( $this->request->getGet('sort_by') ) ? $this->request->getGet('sort_by') : "id:DESC";
         $filter        = $this->request->getGet('filter');
+        $JabatansModel = new JabatansModel();
+        $sql = "SELECT * FROM `jabatans`";   
 
         if( $search ){
-            $JabatansModel->like("name", $search);
-            $JabatansModel->orlike("description", $search);
+            $sql.=" WHERE `name` LIKE '%$search%' OR `description` LIKE '%$search%' ";
         }
 
         
@@ -34,13 +34,16 @@ class Jabatans extends ApiController
         
                 $key   = $f[0];
                 $value = $f[1];
-     
-                if ($i_f === 0 ){
-                    $JabatansModel->where( $key , $value);
-                }else{
-                    $JabatansModel->orWhere( $key, $value);
-                }
 
+                if( !$search && $i_f === 0 ){
+                    $sql.=" WHERE ";
+                }else if( $search && $i_f === 0){
+                    $sql.=" AND ";
+                }else{
+                    $sql.=" OR ";
+                }
+                
+                $sql.="$key='$value' ";
                 $i_f++;
             }
         }
@@ -48,21 +51,20 @@ class Jabatans extends ApiController
         if( $sort_by ){
             $sort = explode(":", $sort_by );
 
-            var_dump( $sort );
-            // $JabatansModel->orderBy( $sort[0], $sort[1]);
-            $JabatansModel->orderBy( "name", "DESC");
+            $sql.= " ORDER BY $sort[0] $sort[1]";
+        }else{
+            $sql.=' ORDER BY `id` DESC ';
         }
 
-        $count_all = $JabatansModel->get()->getNumRows();
+        $count_all = $JabatansModel->db->query( $sql )->getNumRows();
         
         $offset    = ( $page - 1 ) * $per_page;
         
         if( $page || $per_page  ){
-            $JabatansModel->offset( $offset );
-            $JabatansModel->limit( $per_page );
+            $sql.=" LIMIT $per_page OFFSET $offset";
         }
 
-        $data = $JabatansModel->get()->getResultArray();
+        $data = $JabatansModel->db->query( $sql )->getResultArray();
      
         $pagination = [
             "per_page" => (int)$per_page,

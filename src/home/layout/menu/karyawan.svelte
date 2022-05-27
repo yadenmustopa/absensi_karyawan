@@ -6,12 +6,16 @@
     import ModalUpdate from '../modal/update_karyawan.svelte';
     import ModalHistory from '../modal/history_absensi.svelte';
     import ModalChangePhoto  from '../modal/change_photo.svelte';
+    import Pagination from '../component/pagination.svelte'
    
 
     let search;
     let users = [];
     let data_selected;
     let data_selected_photo;
+    let page = 1;
+    let per_page;
+    let pagination;
 
     restart.subscribe( ( start )=> {
         console.log( { start });
@@ -44,7 +48,7 @@
     function getDataUsers()
     {
         let Request = new Rest();
-        let data = {  "with_identity" : "Y" };
+        let data = {  "with_identity" : "Y", page, per_page };
 
         if( search ){
             data.search = search;
@@ -53,10 +57,9 @@
         let request = Request.getUsers( data );
 
         request.then( ( res )=>{
-            let body = res.getBody();
-            users = body.data;
-
-            console.log({ users });
+            let body   = res.getBody();
+            users      = body.data;
+            pagination = body.pagination;
         });
     }
 
@@ -80,6 +83,16 @@
         data_selected_photo = { karyawan_id, path, name  }
     }
 
+    /**
+     * 
+     * @param { Object } e
+     */
+     function changePage( e ){
+        let page_to = e.detail.page_to;
+        page        = page_to;
+        getDataUsers();
+    }
+
 
 </script>
 <div class="row mt-4 d-none page page-karyawan">
@@ -90,7 +103,7 @@
     </div> -->
 
     <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4 p-0 pe-lg-4">
-        <div class="card p-4 ">
+        <div class="card p-4 sticky">
             <div>
                 <label>Cari : </label>
             </div>
@@ -98,6 +111,14 @@
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
                 <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama / alamat..." aria-label="search" aria-describedby="basic-addon1">
             </div>
+            
+        </div>
+
+        <div class="card p-4 sticky mt-4">
+            <div>
+                <label>Navigation : </label>
+            </div>
+            <Pagination data = { pagination } on:click={ changePage }></Pagination>
             
         </div>
     </div>
@@ -172,6 +193,7 @@
                 <div class="alert alert-danger text-white m-0"><i class="icon fas fa-warning"></i> Data tidak di temukan</div>
             </div>
         { /each }
+
         
     </div>
     

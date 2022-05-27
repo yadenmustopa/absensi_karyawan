@@ -10,6 +10,8 @@
     import { isEmptyArr } from '../../lib/handle_array';
     import DateRangeSelect from 'svelte-date-range-select';
     import getColorBgStatus from '../../lib/bg_status_absen';
+    import PaginationNoABsen from '../component/pagination.svelte';
+    import PaginationHasABsen from '../component/pagination.svelte';
     // import { createEventDispatcher } from 'svelte';
 
     // const dispatch     = createEventDispatcher();
@@ -21,6 +23,12 @@
     let data_selected_no_absen;
     let start_date;
     let end_date;
+    let pagination_no_absen;
+    let pagination_has_absen;
+
+    let page_no_absen = 1;
+    let page_has_absen = 1;
+    let per_page
 
     //instance of datepicker svelte
     const startDateId = 'start_date_id' 
@@ -103,6 +111,12 @@
         let end      = stringDateToFormat( end_date + ' 23:59:59')/1000; 
         let data     = { "has_absen" : has_absen,"start_date" : start, "end_date" : end };
 
+        if( has_absen === "Y"){
+            data.page = page_has_absen;
+        }else{
+            data.page = page_no_absen;
+        }
+
         if( search ){
             Object.assign( data, { search })
         }
@@ -114,9 +128,11 @@
 
             if( has_absen === "Y" ){
                 users_has_absened = body.data;
+                pagination_has_absen = body.pagination;
                 console.log({ users_has_absened })
             }else{
                 users_no_absened = body.data;
+                pagination_no_absen = body.pagination;
             }
         });
     }
@@ -195,6 +211,16 @@
         starter();
     }
 
+        /**
+     * 
+     * @param { Object } e
+     */
+     function changePageHasAbsen( e ){
+        let page_to = e.detail.page_to;
+        page        = page_to;
+        getAbsen();
+    }
+
 
 </script>
 
@@ -236,6 +262,11 @@
                     </button>
                 </div>
             </div>
+        </div>
+
+        <div class="card p-4 mt-4">
+            <label>Navigation : </label>
+            <Pagination data = { pagination_has_absen } on:click = { changePageHasAbsen }></Pagination>
         </div>
     </div>
 

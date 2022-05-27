@@ -6,13 +6,16 @@
     import ModalUpdate from '../modal/update_jabatan.svelte';
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
+    import Pagination from '../component/pagination.svelte';
     // import { createEventDispatcher } from 'svelte';
 
     // const dispatch     = createEventDispatcher();
 
     let search;
     let jabatans = [];
+    let per_page = 10;
     let data_selected;
+    let pagination;
 
     starter();
 
@@ -33,19 +36,22 @@
     //     starter();
     // }
 
-    function getDatajabatans(){
+    function getDatajabatans( page = 1 ){
         let Request = new Rest();
-        let data = {};
+        let data = { page, per_page };
 
         if( search ){
-            data = { "search" : search }
+            Object.assign( data, { search });
         }
 
         let request = Request.getJabatans( data );
 
         request.then( ( res )=>{
-            let body = res.getBody();
+            let body    = res.getBody();
             jabatans    = body.data;
+            pagination  = body.pagination;
+
+            console.log({ pagination });
         });
     }
 
@@ -81,6 +87,16 @@
                 starter();
             })
         });
+    }
+
+    /**
+     * 
+     * @param { Object } e
+     */
+    function changePage( e ){
+        let page_to = e.detail.page_to;
+        page        = page_to;
+        getDatajabatans();
     }
 
 
@@ -141,16 +157,18 @@
                                 </td>
                                
                             </tr>
-                            { :else }
+                            { :else }   
                             <td colspan=4>
                                 <div class="alert alert-danger text-white m-0">Data Tidak Di temukan</div>
                             </td>
                             {/each}
-
                         </tbody>
                     </table>
                 </div>
+                <Pagination data={ pagination } on:click = { changePage }></Pagination>
             </div>
+
+            
 
         </div>
 

@@ -7,6 +7,7 @@
     import ModalUpdatePwd from '../modal/update_password.svelte';
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
+    import Pagination from '../component/pagination.svelte';
     // import { createEventDispatcher } from 'svelte';
 
     // const dispatch     = createEventDispatcher();
@@ -15,11 +16,13 @@
     let users = [];
     let data_selected;
     let role_access;
+    let pagination;
+    let per_page;
+    let page =  1;
 
     starter();
 
     $:if( search || ! search ){
-        console.log( { search });
         getDataUsers();
     }
 
@@ -39,17 +42,24 @@
 
     function getDataUsers(){
         let Request = new Rest();
-        let data = {};
+        let data    = { page, per_page };
+
+        console.log("ieu user");
 
         if( search ){
-            data = { "search" : search }
+            Object.assign( data, { search });
         }
+
+        console.log({ data });
 
         let request = Request.getUsers( data );
 
         request.then( ( res )=>{
             let body = res.getBody();
             users    = body.data;
+            pagination = body.pagination;
+
+            console.log({ pagination });
         });
     }
 
@@ -109,21 +119,32 @@
         return ( role === 'ADMIN' ) ? 'bg-gradient-info' : 'bg-gradient-warning'; 
     }
 
+    /**
+     * 
+     * @param { Object } e
+     */
+     function changePage( e ){
+        let page_to = e.detail.page_to;
+        page        = page_to;
+        getDataUsers();
+    }
 
 </script>
 
 <div class="row mt-4 d-none page page-user">
    
 
-    <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4">
-        <div class="card p-4">
-            <div>
-                <label>Cari : </label>
-            </div>
+    <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4 sticky">
+        <div class="card p-4 ">
+            <label>Cari : </label>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
                 <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama / alamat..." aria-label="search" aria-describedby="basic-addon1">
-              </div>
+            </div>
+        </div>
+        <div class="card p-4 mt-4">
+            <label>Navigation : </label>
+            <Pagination data = { pagination } on:click = { changePage }></Pagination>
         </div>
     </div>
 

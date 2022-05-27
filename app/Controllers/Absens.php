@@ -14,15 +14,15 @@
         public function index()
         {
             $search        = $this->request->getGet('search') ;
-            $page          = (int)$this->request->getGet('page') ?? 1;
-            $per_page      = (int)$this->request->getGet('per_page') ?? 10;
-            
+            $page          = ( $this->request->getGet('page') ) ? ( int )$this->request->getGet('page') : 1;
+            $per_page      = ( $this->request->getGet('per_page') ) ? ( int ) $this->request->getGet('per_page') :  10 ;
+
             $sort_by       = $this->request->getGet('sort_by');
             $filter        = $this->request->getGet('filter');
             
             $has_absen     = $this->request->getGet('has_absen') ;
-            $start_date    = $this->request->getGet('start_date') ?? strtotime( date('m-01-Y 00:00:00' ) );
-            $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
+            $start_date    = ( $this->request->getGet('start_date') ) ? $this->request->getGet('start_date') : strtotime( date('m-01-Y 00:00:00' ) );
+            $end_date      = ( $this->request->getGet('end_date') ) ? $this->request->getGet('end_date') : Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $search = trim( $search );
 
@@ -94,6 +94,8 @@
                 $sort = explode(":", $sort_by );
 
                 $base.=" ORDER BY $sort[0] $sort[1]";
+            }else{
+                $base.=" ORDER BY `users`.`name` ASC";
             }
 
             $count_all = $AbsenModel->db->query( $base )->getNumRows();
@@ -140,6 +142,8 @@
                 $sort = explode(":", $sort_by );
 
                 $base.=" ORDER BY $sort[0] $sort[1]";
+            }else{
+                $base.=" ORDER BY `absens`.`id` DESC";
             }
 
             
