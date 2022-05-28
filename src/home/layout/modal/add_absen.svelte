@@ -70,6 +70,7 @@
                         <form role="form text-left">
                             <label>Nama :</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="icon fas fa-user"></i></span>
                                 <input type="text" class="form-control" aria-label="Nama" bind:value={ name } disabled>
                             </div>
 
@@ -84,6 +85,7 @@
 
                             <label>Ketrangan :</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="icon fas fa-list"></i></span>
                                 <textarea type="text" class="form-control" placeholder="Keterangan" aria-label="Nama"
                                     bind:value={ description }></textarea>
                             </div>

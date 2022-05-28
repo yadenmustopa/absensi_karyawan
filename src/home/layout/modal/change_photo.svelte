@@ -1,13 +1,12 @@
 <script>
     'use strict';
-    import croppie from 'croppie';
+    import Croppie from 'croppie';
     import Request from '../../modul/request';  
     import preloader from '../../lib/preloader';
     import { alertToast } from '../../lib/alert';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
-    
     let karyawan_id;
     let name;
     let path;
@@ -68,8 +67,8 @@
                     window.jquery("#btn-remove-photo,#btn-apply-photo").removeClass('d-none');
                     window.jquery("#btn-add-photo").addClass('d-none');
                     if(!upload_crop) {
-                        upload_crop = window.jquery('#photo-cropper').croppie({
-                            // enableExif: true,
+                        upload_crop = new Croppie( document.getElementById('photo-cropper'),{
+                                    // enableExif: true,
                             url : e.target.result,
                             viewport: {
                                 width: 256,
@@ -80,12 +79,28 @@
                                 width: 300,
                                 height: 300
                             }
-                        });
+                        })
+                        // upload_crop = window.jquery('#photo-cropper').croppie({
+                        //     // enableExif: true,
+                        //     url : e.target.result,
+                        //     viewport: {
+                        //         width: 256,
+                        //         height: 256,
+                        //         type: 'circle'
+                        //     },
+                        //     boundary: {
+                        //         width: 300,
+                        //         height: 300
+                        //     }
+                        // });
                     }
                     else {
-                        upload_crop.croppie('bind', {
+                        // upload_crop.croppie('bind', {
+                        //     url : e.target.result
+                        // });
+                        upload_crop.bind({
                             url : e.target.result
-                        });
+                        })
                     }
 
 
@@ -103,32 +118,52 @@
             window.jquery("#btn-remove-photo,#btn-apply-photo").addClass('d-none');
             window.jquery("#btn-add-photo").removeClass('d-none');
             window.jquery("#photo-karyawan-preview").show();
-            upload_crop.croppie('destroy');
+            // upload_crop.croppie('destroy');
+            destroy();
             upload_crop = null;
         });
 
         preview_container.on("click","#btn-apply-photo", () => {
             window.jquery("#photo-karyawan-preview").show();
-            upload_crop.croppie('result', {
+            upload_crop.result(
+                {
                 type : 'base64',
                 format : 'webp',
                 circle : true,
             }).then((result) => {
                 window.jquery("#photo-karyawan-preview").attr('src', result);
                 result_photo = result;
-
+                destroy();
+                closeModal();
                 console.log( { result_photo });
             });
+            // upload_crop.croppie('result', {
+            //     type : 'base64',
+            //     format : 'webp',
+            //     circle : true,
+            // }).then((result) => {
+            //     window.jquery("#photo-karyawan-preview").attr('src', result);
+            //     result_photo = result;
+            //     destroy();
+            //     closeModal();
+            //     console.log( { result_photo });
+            // });
 
             window.jquery("#btn-remove-photo").click();
         });
 
     }
 
+    function closeModal()
+    {
+        window.jquery(".modal-change-photo .btn-close-modal").click();
+    }
+
 
     function destroy(){
         if( upload_crop ){
-            upload_crop.croppie('destroy');
+            // upload_crop.croppie('destroy');
+            upload_crop.destroy();
         }
     }
 </script>

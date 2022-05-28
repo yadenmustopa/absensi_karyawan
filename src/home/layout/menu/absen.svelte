@@ -8,12 +8,15 @@
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
     import { restart }  from '../../store/toggle_restart';
-    import { isEmptyArr } from '../../lib/handle_array';
-    import DateRangeSelect from 'svelte-date-range-select';
-    import getColorBgStatus from '../../lib/bg_status_absen';
-    import PaginationNoABsen from '../component/pagination.svelte';
-    import PaginationHasABsen from '../component/pagination.svelte';
-    import daterangepicker from 'daterangepicker';
+    import { isEmptyArr }     from '../../lib/handle_array';
+    import DateRangeSelect    from 'svelte-date-range-select';
+    import getColorBgStatus   from '../../lib/bg_status_absen';
+    import PaginationNoAbsen  from '../component/pagination.svelte';
+    import PaginationHasAbsen from '../component/pagination.svelte';
+    import InfoResultHasAbsen from '../component/info_result.svelte';
+    import InfoResultNoAbsen  from '../component/info_result.svelte';
+    import daterangepicker    from 'daterangepicker';
+    import param_date_picker  from '../../settings/param_date_picker';
     // import { createEventDispatcher } from 'svelte';
 
     // const dispatch     = createEventDispatcher();
@@ -30,21 +33,15 @@
 
     let page_no_absen = 1;
     let page_has_absen = 1;
-    let per_page
+    let count_all_no_absen = 0;
+    let count_all_has_absen = 0;
+    let per_page = "10";
+    let filter;
+    let sort_by_has_absense = "`absens`.`id`:DESC";
+    let sort_by_no_absense = "`users`.`name`:ASC";
 
-    //instance of datepicker svelte
-    const startDateId = 'start_date_id' 
-    const endDateId = 'end_date_id' 
-
-    const name_datepicker    = 'crated_date';
-    const heading_datepicker = 'Jarak Tanggal :' 
-        // this limits the HTML5 date picker end date - e.g. today is used here 
-    const endDateMax = new Date();
-
-    // this limits the HTML5 date picker's start date - e.g. 3 years is select here
-    const startDateMin = new Date(
-    new Date().setFullYear(endDateMax.getFullYear(), endDateMax.getMonth() - 36)
-    );
+    let offset_no_absen = 0;
+    let offset_has_absen = 0;
 
     const labels = {
         notSet: 'not set',
@@ -85,6 +82,7 @@
     function defaultRangeDate(){
         start_date = getToday('YYYY-MM-DD');
         end_date   = getToday('YYYY-MM-DD');
+
     }
 
     function starter(){
@@ -118,9 +116,12 @@
         let data     = { "has_absen" : has_absen,"start_date" : start, "end_date" : end };
 
         if( has_absen === "Y"){
-            data.page = page_has_absen;
+            data.page            = page_has_absen;
+            data.filter          = filter;
+            data.sort_by         = sort_by_has_absense;
         }else{
-            data.page = page_no_absen;
+            data.page            = page_no_absen;
+            data.sort_by         = sort_by_no_absense;
         }
 
         if( search ){
@@ -135,10 +136,13 @@
             if( has_absen === "Y" ){
                 users_has_absened = body.data;
                 pagination_has_absen = body.pagination;
-                console.log({ users_has_absened })
+                count_all_has_absen  = pagination_has_absen.count_all;
+                offset_has_absen     = pagination_has_absen.offset;
             }else{
-                users_no_absened = body.data;
-                pagination_no_absen = body.pagination;
+                users_no_absened     = body.data;
+                pagination_no_absen  = body.pagination;
+                count_all_no_absen   = pagination_no_absen.count_all;
+                offset_no_absen      = pagination_no_absen.offset;
             }
         });
     }
@@ -201,20 +205,65 @@
         })
     }
 
-    function handleApplyDateRange(data){
+    // function handleApplyDateRange(data){
 
-        let value  = data.detail;
-        start_date = value.startDate;
-        end_date   = value.endDate;
+    //     let value  = data.detail;
+    //     start_date = value.startDate;
+    //     end_date   = value.endDate;
+
+    //     starter();
+    // }
+
+    /**
+     * 
+     * @param start
+     * @param end
+     */
+    function changeDate( start, end ){
+        start_date = start.format("YYYY-MM-DD");
+        end_date   = end.format("YYYY-MM-DD");
 
         starter();
     }
 
     function resetFilter(){
-        console.log('reset filter');
-        search = "";
+        search   = "";
+        filter   = "";
+        page     = 1;
+        per_page = "10";
+        sort_by_has_absense = "`absens`.`id`:DESC";
+        sort_by_no_absense  = "`users`.`name`:ASC";
+
+        setDefaultDatePicker();
         defaultRangeDate();
         starter();
+    }
+
+
+    function setDefaultDatePicker()
+    {
+        jquery('input[name="datetimes"]').data('daterangepicker').setStartDate( getToday('DD-MM-YYYY') );
+        jquery('input[name="datetimes"]').data('daterangepicker').setEndDate( getToday('DD-MM-YYYY') );
+    }
+
+    /**
+     * 
+     * @param { Object } e event
+     */
+    function changeSortByNoAbsen( e ){
+        let value = e.target.value;
+        sort_by_no_absense = value;
+        getUserNoAbsened();
+    }
+
+    /**
+     * 
+     * @param { Object } e event
+     */
+    function changeSortByHasAbsen( e ){
+        let value = e.target.value;
+        sort_by_has_absense = value;
+        getUserHasAbsened();
     }
 
         /**
@@ -223,18 +272,40 @@
      */
      function changePageHasAbsen( e ){
         let page_to = e.detail.page_to;
-        page        = page_to;
-        getAbsen();
+        page_has_absen = page_to;
+        getUserHasAbsened();
     }
+
+
+        /**
+     * 
+     * @param { Object } e
+     */
+     function changePageNoAbsen( e ){
+        let page_to   = e.detail.page_to;
+        page_no_absen = page_to;
+        getUserNoAbsened();
+    }
+
+        /**
+     * 
+     * @param { Object } e
+     */
+     function changePerPage( e ){
+        per_page =  e.target.value;
+        getUserNoAbsened();
+        getUserHasAbsened();
+    }
+
 
 
     //instanse date range picker
     function instanceDatePicker()
     {
-        window.jquery('input[name="datetimes"]').daterangepicker({
-            opens: 'left'
-        }, function(start, end, label) {
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        console.log({ param_date_picker });
+        window.jquery('input[name="datetimes"]').daterangepicker( param_date_picker, function(start, end, label) {
+            changeDate( start, end );
+            // console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY') + label );
         });
     }
 
@@ -242,55 +313,94 @@
 </script>
 
 <div class="row mt-4 d-none page page-absen">
-    <div class="col-12 d-flex justify-content-end p-4 pt-0 pb-2">
-    </div>
 
-    <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4">
+    <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4 sticky-lg-top">
         <div class="card p-4">
             <h4>Filter</h4>
-            <div>
-                <label>Cari Nama Karyawan : </label>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-                <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama" aria-label="search" aria-describedby="basic-addon1">
-            </div>
-            <div class="d-flex-lg justify-content-lg-between">
 
-                <div class="d-block">
-                    <label>Pilih Tanggal :</label><br/>
-                    <input type="text" name="datetimes" />
-                    <!-- <div class="wrap-date-range">
-                        <DateRangeSelect
-                            name    = { name_datepicker }
-                            heading = { heading_datepicker }
-                            {startDateMin}
-                            {endDateMax}
-                            {labels}
-                            {startDateId}
-                            {endDateId}
-                            on:onApplyDateRange = {handleApplyDateRange} 
-                        />
-                    </div> -->
-                </div>
-    
-                <div class="d-flex justify-content-end mt-sm-4 mt-md-4 w-100">
-                    <button type="button" class="btn bg-gradient-danger w-100" on:click={ resetFilter }>
-                        <i class="fas fa-history text-white"></i> &nbsp; Reset Filter
-                    </button>
+            <div class="mb-3">
+                <label>Cari Nama Karyawan : </label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama" aria-label="search" aria-describedby="basic-addon1">
                 </div>
             </div>
+
+            <div class="d-block mb-3">
+                <label>Pilih Tanggal :</label><br/>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="icon fas fa-calendar"></i></span>
+                    <input type="text" class="form-control w-100"  name="datetimes" />
+                </div>
+            </div>
+
+            <div class = "mb-3">
+                <label>Per Halaman:</label>
+                <select class="form-select" aria-label="Default select example" bind:value= { per_page } on:change = { changePerPage }>
+                    <option value=10>10</option>
+                    <option value=20>20</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                </select>
+            </div>
+
+        </div>
+      
+        <div class="card p-4 mt-4">
+            <div class="mb-3">
+                <label>Urutkan Berdasarkan:</label>
+                <select class="form-select" aria-label="Default select example" bind:value= { sort_by_no_absense } on:change = { changeSortByNoAbsen }>
+                    <option value="`users`.`name`:ASC"> Urutan Nama </option>
+                    <option value="`users`.`id`:DESC"> Data Terbaru </option>
+                    <option value="`users`.`id`:ASC"> Data Terlama </option>
+                    <option value="`users`.`updated_at`:DESC"> Terbaru Diupdate </option>
+                    <option value="`users`.`updated_at`:ASC"> Terlama Diupdate </option>
+                </select>
+            </div>
+
+            <InfoResultNoAbsen result_length={ users_no_absened.length } count_all={ count_all_no_absen } _class="mb-3" _label="Info Belum Absen"></InfoResultNoAbsen>
+            <PaginationNoAbsen data = { pagination_has_absen } on:click = { changePageNoAbsen } _label="Navigation :"></PaginationNoAbsen>
         </div>
 
         <div class="card p-4 mt-4">
-            <label>Navigation : </label>
-            <PaginationHasABsen data = { pagination_has_absen } on:click = { changePageHasAbsen }></PaginationHasABsen>
+            <div class="mb-3">
+                <label>Urutkan Berdasarkan:</label>
+                <select class="form-select" aria-label="Default select example" bind:value= { sort_by_has_absense } on:change = { changeSortByHasAbsen }>
+                    <option value="`absens`.`id`:DESC"> Data Terbaru </option>
+                    <option value="`absens`.`id`:ASC"> Data Terlama </option>
+                    <option value="`absens`.`updated_at`:DESC"> Terbaru Diupdate </option>
+                    <option value="`absens`.`updated_at`:ASC"> Terlama Diupdate </option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label>Filter Status Absen :</label>
+                <select class="form-select" aria-label="Default select example" bind:value= { filter } on:change = { changePerPage }>
+                    <option value="">SEMUA</option>
+                    <option value="`absens`.`status`: = 'MASUK' ">MASUK</option>
+                    <option value="`absens`.`status`: = 'CUTI' ">CUTI</option>
+                    <option value="`absens`.`status`: = 'IZIN' ">IZIN</option>
+                    <option value="`absens`.`status`: = 'TANPA_KETERANGAN' ">TANPA KETERANGAN</option>
+                </select>
+            </div>
+
+            <InfoResultHasAbsen result_length={ users_has_absened.length } count_all={ count_all_has_absen } _class="mb-3" _label="Info Sudah Absen"></InfoResultHasAbsen>
+
+            <PaginationHasAbsen data = { pagination_has_absen } on:click = { changePageHasAbsen } _label="Navigation :"></PaginationHasAbsen>
+        </div>
+
+        <div class="card p-4 mt-4">
+            <div class="d-flex justify-content-end mt-sm-4 mt-md-4 w-100">
+                <button type="button" class="btn bg-gradient-danger w-100" on:click={ resetFilter }>
+                    <i class="fas fa-history text-white"></i> &nbsp; Reset Filter
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="col-lg-8 col-sm-12 col-md-12 wrap-content ">
         <div class="card mb-4">
-                <h3 class="mt-4 ms-4">:: Belum Absen ::</h3>
+                <h3 class="mt-4 ms-4">Belum Absen</h3>
                 { #if ( ! isEmptyArr( users_no_absened ))}
                     <div class="d-lg-flex justify-content-lg-end pe-4 mt-2">
                         <div class="ms-sm-4 ms-lg-0 ms-md-4">
@@ -325,7 +435,7 @@
                         <tbody>
                             { #each users_no_absened as user, i }
                                 <tr>
-                                    <td align="left" width ="10%">{ i + 1 }</td>
+                                    <td align="left" width ="10%">{ i + (  offset_no_absen + 1 )}</td>
                                     <td align="left">{ user.name }</td>
                                     <td align="center">{ user.position }</td>
                                  
@@ -357,7 +467,7 @@
         </div>
         
         <div class="card mb-4">
-            <h3 class="mt-4 ms-4">:: Sudah Di Absen ::</h3>
+            <h3 class="mt-4 ms-4">Sudah Di Absen<h3>
     
             <div class="card-body row">
                 <div class="table-responsive">
@@ -382,7 +492,7 @@
                         <tbody>
                             { #each users_has_absened as user, i }
                                 <tr>
-                                    <td align="left" width ="10%">{ i + 1 }</td>
+                                    <td align="left" width ="10%">{ i + ( offset_has_absen + 1 ) }</td>
                                     <td align="left">{ user.name }</td>
                                     <td align="center">{ user.position }</td>
                                     <td align="center" class={ getColorBgStatus( user.status) }>{ ( user.status === "TANPA_KETERANGAN" ? 'TANPA KETERANGAN' : user.status )  }</td>

@@ -6,7 +6,8 @@
 import './app.scss';
 // import './soft-ui-dashboard.scss';
 import App from './App.svelte';
-window.jquery = $;
+import jquery from 'jquery';
+window.jquery = jquery;
 console.log({ window });
 
 

@@ -21,6 +21,7 @@
     let per_page;
     let page =  1;
     let count_all = 0;
+    let offset    = 0;
     let filter;
     let sort_by = "`id`:DESC" ;
 
@@ -55,10 +56,11 @@
         let request = Request.getUsers( data );
 
         request.then( ( res )=>{
-            let body = res.getBody();
-            users    = body.data;
+            let body   = res.getBody();
+            users      = body.data;
             pagination = body.pagination;
-            count_all = pagination.count_all;
+            count_all  = pagination.count_all;
+            offset     = pagination.offset;
             console.log({ pagination });
         });
     }
@@ -172,7 +174,7 @@
 <div class="row mt-4 d-none page page-user">
    
 
-    <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4 sticky">
+    <div class="col-lg-4 col-sm-12 col-md-12 mb-lg-0 mb-4 sticky-lg-top">
         <div class="card p-4 mb-4">
             <label>Cari : </label>
             <div class="input-group mb-3">
@@ -254,7 +256,7 @@
                         <tbody>
                             { #each users as user, i }
                             <tr>
-                                <td align="left" width ="10%">{ i + 1 }</td>
+                                <td align="left" width ="10%">{( offset + 1 ) + i }</td>
                                 <td align="left">{ user.name }</td>
                                 <td align="left">{ user.username }</td>
                                 <td align="center" class="text-white { getBGByRole( user.role ) }">{ user.role}</td>

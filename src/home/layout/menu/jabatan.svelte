@@ -7,16 +7,20 @@
     import { confirm, alertToast } from '../../lib/alert';
     import preloader from '../../lib/preloader';
     import Pagination from '../component/pagination.svelte';
+    import InfoResult from '../component/info_result.svelte';
     // import { createEventDispatcher } from 'svelte';
 
     // const dispatch     = createEventDispatcher();
 
     let search;
     let jabatans = [];
-    let per_page = 10;
+    let per_page = "10";
+    let page     = 1;
     let data_selected;
     let pagination;
-
+    let offset;
+    let count_all;
+    let sort_by = "`id`:DESC";
     starter();
 
     $:if( search || ! search ){
@@ -36,7 +40,7 @@
     //     starter();
     // }
 
-    function getDatajabatans( page = 1 ){
+    function getDatajabatans(){
         let Request = new Rest();
         let data = { page, per_page };
 
@@ -50,9 +54,28 @@
             let body    = res.getBody();
             jabatans    = body.data;
             pagination  = body.pagination;
-
-            console.log({ pagination });
+            offset      = pagination.offset;
+            count_all   = pagination.count_all;
         });
+    }
+
+     /**
+     * 
+     * @param { Object } e
+     */
+     function changeFilter( e ){
+        filter = e.target.value;
+        getDataUsers();
+    }
+
+
+    /**
+     * 
+     * @param { Object } e
+     */
+    function changeSortBy( e ){
+        sort_by = e.target.value;
+        getDataUsers();
     }
 
     /**
@@ -99,6 +122,26 @@
         getDatajabatans();
     }
 
+    
+    function resetFilter(){
+        search = "";
+        page   = 1;
+        filter = '',
+        sort_by = "`id`:DESC" ;
+        per_page = 10;
+        getJabatans();
+    }
+
+        /**
+     * 
+     * @param { Object } e
+     */
+     function changePerPage( e ){
+        per_page =  e.target.value;
+        getJabatans();
+    }
+
+
 
 </script>
 
@@ -111,7 +154,39 @@
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
                 <input type="text" class="form-control" bind:value = { search } placeholder= "Cari Nama Jabatan/Bagian..." aria-label="search" aria-describedby="basic-addon1">
-              </div>
+            </div>
+            
+            <div class="mb-3">
+                <label>Urutkan Berdasarkan:</label>
+                <select class="form-select" aria-label="Default select example" bind:value= { sort_by } on:change = { changeSortBy }>
+                    <option value="`id`:DESC"> Data Terbaru </option>
+                    <option value="`id`:ASC"> Data Terlama </option>
+                    <option value="`updated_at`:DESC"> Terbaru Diupdate </option>
+                    <option value="`updated_at`:ASC"> Terlama Diupdate </option>
+                    <option value="`name`:ASC"> Urutkan Nama </option>
+                </select>
+            </div>
+    
+            <div class = "mb-3">
+                <label>Per Halaman:</label>
+                <select class="form-select" aria-label="Default select example" bind:value= { per_page } on:change = { changePerPage }>
+                    <option value=10>10</option>
+                    <option value=20>20</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                </select>
+            </div>
+    
+            <div class="mb-3 mt-3 w-100">
+                <button type="button" class="btn btn-raised btn-danger w-100" on:click = { resetFilter }>
+                    <i class="icon fas fa-history text-white"></i> &nbsp; Reset Filter
+                </button>
+            </div>
+        </div>
+
+        <div class="card p-4">
+            <InfoResult result_length = { jabatans.length } count_all = { count_all } _class="mb-3" _label="Info Result"></InfoResult> 
+            <Pagination data={ pagination } on:click = { changePage } _class ="mb-3" _label="Navigation :"></Pagination>
         </div>
     </div>
 
@@ -144,7 +219,7 @@
                         <tbody>
                             { #each jabatans as jabatan, i }
                             <tr>
-                                <td align="left" width ="10%">{ i + 1 }</td>
+                                <td align="left" width ="10%">{ i + ( offset + 1) }</td>
                                 <td align="center">{ jabatan.name }</td>
                                 <td align="left">{ jabatan.description }</td>
                                 <td align="right">
@@ -165,7 +240,7 @@
                         </tbody>
                     </table>
                 </div>
-                <Pagination data={ pagination } on:click = { changePage }></Pagination>
+              
             </div>
 
             

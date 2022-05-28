@@ -133,7 +133,7 @@
         page   = 1;
         filter = '',
         sort_by = "`users`.`id`:DESC" ;
-        per_page = 10;
+        per_page = "10";
         getDataUsers();
     }
 
@@ -146,7 +146,7 @@
         </button>
     </div> -->
 
-    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4 p-0 pe-lg-4 sticky-top sticky">
+    <div class="col-lg-4 col-sm-12 mb-lg-0 mb-4 p-0 pe-lg-4 sticky-top sticky-lg-top">
         <div class="card p-4 mb-4">
             <div>
                 <label>Cari : </label>

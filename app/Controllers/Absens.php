@@ -130,7 +130,7 @@
 					$key   = $f[0];
 					$value = $f[1];
 				
-					$base.=" AND $key = '$value'";
+					$base.=" AND $key $value";
 	
 					$i_f++;
 				}
@@ -165,20 +165,67 @@
 
 
         public function getById( $user_id ){
-            $search        = $this->request->getGet('search') ;
-            // $has_absen     = $this->request->getGet('has_absen') ;
-            $start_date    = $this->request->getGet('start_date') ?? strtotime( date('m-01-Y 00:00:00' ) );
-            $end_date      = $this->request->getGet('end_date') ??  Time::now('Asia/Jakarta','id')->getTimestamp();
+            $page          = ( $this->request->getGet('page') ) ? ( int )$this->request->getGet('page') : 1;
+            $per_page      = ( $this->request->getGet('per_page') ) ? ( int ) $this->request->getGet('per_page') :  10 ;
+
+            $sort_by       = $this->request->getGet('sort_by');
+            $filter        = $this->request->getGet('filter');
+            
+            $start_date    = ( $this->request->getGet('start_date') ) ? $this->request->getGet('start_date') : strtotime( date('m-01-Y 00:00:00' ) );
+            $end_date      = ( $this->request->getGet('end_date') ) ? $this->request->getGet('end_date') : Time::now('Asia/Jakarta','id')->getTimestamp();
 
             $AbsenModel    = new AbsensModel();
-            $sql = $AbsenModel -> where('user_id', $user_id )
-                               -> where('created_at>=', $start_date )
-                               -> where('created_at<=', $end_date )
-                               -> get()->getResultArray();
+         
+            $base = "SELECT * FROM `absens`  WHERE `created_at` BETWEEN $start_date AND $end_date ";
 
-            $data = [ "data" => $sql ];
+            if( $filter ){
+                $i_f    = 0;
+				$filter = explode(';', $filter);
+				
+				foreach ($filter as $d_f) {
+					$f = explode(':', $d_f);
+			
+					$key   = $f[0];
+					$value = $f[1];
+				
+				
+					$base.=" AND $key $value";
+	
+					$i_f++;
+				}
+            }
 
-            return $this->successOutput( $data );
+            if( $sort_by ){
+                $sort = explode(":", $sort_by );
+
+                $base.=" ORDER BY $sort[0] $sort[1]";
+            }else{
+                $base.=" ORDER BY `created_at` DESC";
+            }
+
+            $count_all = $AbsenModel->db->query( $base )->getNumRows();
+            
+            $offset    = ( $page - 1 ) * $per_page;
+            
+            if( $page || $per_page  ){
+                $base.=" LIMIT $per_page OFFSET $offset";
+            }
+            
+            $data = $AbsenModel->db->query( $base )->getResultArray();
+
+            $pagination = [
+                "per_page" => (int)$per_page,
+                "page"     => (int)$page,
+                "offset"   => (int)$offset,
+                "count_all" => (int)$count_all,
+            ];
+
+            $output = [
+               "pagination" => $pagination,
+               "data" => $data,
+            ];
+
+            return $this->successOutput( $output );
             
         }
 

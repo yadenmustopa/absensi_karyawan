@@ -70,8 +70,8 @@ const config = {
                 files : [
                     "./public/assets/soft-ui/js/core/popper.min.js",
                     "./public/assets/soft-ui/js/core/bootstrap.min.js",
-                    "./public/assets/vendors/croppie/croppie.min.js",
-                    "./public/assets/vendors/jquery/jquery-3.6.0.min.js",
+                    // "./public/assets/vendors/croppie/croppie.min.js",
+                    // "./public/assets/vendors/jquery/jquery-3.6.0.min.js",
                     "./public/assets/vendors/moment/moment.min.js",
                     "./public/assets/soft-ui/js/plugins/perfect-scrollbar.min.js",
                     "./public/assets/soft-ui/js/plugins/smooth-scrollbar.min.js",

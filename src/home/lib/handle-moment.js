@@ -14,6 +14,24 @@ function convertToDate( time_stamp, format = "DD MM yyyy" ){
 }
 
 /**
+ * 
+ * @param { String } format  x is mean format for uniquetimestamp;
+ */
+function getFirstOfMonth( format = "x" ){
+	return moment().startOf('month').format( format );
+}
+
+/**
+ * 
+ * @param { String } format 
+ * @returns 
+ */
+function getEndOfMonth( format = "x" ){
+	return moment().endOf('month').format( format );
+}
+
+
+/**
  *
  * @return {number}
  */
@@ -171,4 +189,6 @@ module.exports = {
 	dateFormat,
 	untilTime,
 	longTimePassed,
+	getFirstOfMonth,
+	getEndOfMonth,
 }

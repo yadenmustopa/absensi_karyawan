@@ -61,6 +61,9 @@
                         <form role="form text-left">
                             <label>Nama:</label>
                             <div class="input-group mb-3">
+                                <span class="input-group-text">
+                                    <i class="icon fas fa-user"></i>
+                                </span>
                                 <input type="nama" class="form-control" placeholder="Nama" aria-label="Nama" bind:value = { name }
                                     aria-describedby="email-addon">
                             </div>

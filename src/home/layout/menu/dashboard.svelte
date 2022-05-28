@@ -1,13 +1,22 @@
 <script>
+    //TODO Dashboard
     "use strict";
     import Rest from '../../modul/Request';
     import { getToday, stringDateToFormat } from '../../lib/handle-moment';
 
+    export let data_user;
+
     let search;
     let count_all_karyawan;
     let users      = [];
-    let start_date = getToday('YYYY-MM-DD');
-    let end_date   = getToday('YYYY-MM-DD');
+    let start_date;
+    let end_date;
+    let role_access;
+
+    $:if( data_user ){
+        console.log({ data_user });
+    }
+
     starter();
 
     function starter(){
@@ -16,8 +25,7 @@
     }
 
     function defaultRangeDate(){
-        start_date = stringDateToFormat( start_date + ' 00:00:00' );
-        end_date   = stringDateToFormat( start_date + ' 00:00:00' );
+     
     }
 
     function getCountAllKaryawan(){
@@ -35,7 +43,10 @@
 
     function getNotAbsened(){
         let Request = new Rest();
-        let data    = { has_absen : "N", start_date, end_date }
+
+        start = stringDateToFormat( start_date + ' 00:00:00' );
+        end   = stringDateToFormat( end_date + ' 23:59:59' );
+        let data    = { has_absen : "N", start_date : start, end_date : end }
         let request = Request.getAbsens( data );
         
 
@@ -45,6 +56,8 @@
             console.log( { body });
         });
     }
+
+
 
 </script>
 
