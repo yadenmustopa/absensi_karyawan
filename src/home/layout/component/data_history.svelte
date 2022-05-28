@@ -166,7 +166,7 @@
         page   = 1;
         filter = '',
         sort_by = "`id`:DESC" ;
-        per_page = 10;
+        per_page = "10";
         defaultRangeDate();
         getHistoryById();
     }
