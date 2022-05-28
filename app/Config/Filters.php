@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\Cors;
 use App\Filters\CheckApiKey;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
@@ -23,6 +24,7 @@ class Filters extends BaseConfig
         'csrf'          => CSRF::class,
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
+        'cors'          => Cors::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
     ];
@@ -35,13 +37,15 @@ class Filters extends BaseConfig
      */
     public $globals = [
         'before' => [
-            'checkapikey'
+            'checkapikey',
+            'cors',
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
         ],
         'after' => [
             'toolbar',
+            'cors',
             // 'honeypot',
             // 'secureheaders',
         ],
