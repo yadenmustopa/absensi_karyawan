@@ -134,7 +134,7 @@
             let body = res.getBody();
 
             if( has_absen === "Y" ){
-                users_has_absened = body.data;
+                users_has_absened    = body.data;
                 pagination_has_absen = body.pagination;
                 count_all_has_absen  = pagination_has_absen.count_all;
                 offset_has_absen     = pagination_has_absen.offset;
