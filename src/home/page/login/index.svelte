@@ -62,12 +62,14 @@
                             <div class="card-body pt-0">
                                 <form role="form">
                                     <label>Username</label>
-                                    <div class="mb-3">
+                                    <div class="mb-3 input-group">
+                                        <span class="input-group-text"><i class="icon fas fa-user"></i></span>
                                         <input type="username" bind:value={ username } class="form-control" placeholder="Masukan Username" aria-label="Username" aria-describedby="username-addon" >
                                     </div>
 
                                     <label>Password</label>
-                                    <div class="mb-3">
+                                    <div class="mb-3 input-group">
+                                        <span class="input-group-text"><i class="icon fas fa-key"></i></span>
                                         <input type="password" bind:value={ password } class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
                                     </div>
 
